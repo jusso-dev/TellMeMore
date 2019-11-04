@@ -1,0 +1,45 @@
+﻿@page
+@model IndexModel
+
+<div class="text-center">
+	<h1 class="display-4"><strong><em>TellMeMore</em></strong></h1>
+	<p>This tool is used to preform reconnaissance on a target web hosted solution.</p>
+</div>
+
+<div class="text-center" style="margin-top:5%">
+	<h4>IMPORTANT</h4>
+
+	<p>
+		By using this site, you agree to the terms and conditions set out by the retrospective site owners.
+		<br />
+		Attempt to abuse the vendors endpoints using <em>TellMeMore</em> will result in a permanent IP blacklist.
+	</p>
+</div>
+
+<div class="text-center" style="margin-top:5%">
+
+	<h2>In a rush?</h2>
+	<h4>Bulk scan all tests below.</h4>
+
+	@if (!string.IsNullOrEmpty(TempData["Error"]?.ToString()))
+	{
+		<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+			<div class="alert alert-danger alert-dismissible fade show">
+				@TempData["Error"]?.ToString()
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	}
+
+	<div class="form-group">
+		<form method="POST" style="margin-top:2%;">
+			<label style="font-size:large;font-weight:bold">Host URL</label>
+			<input type="text" placeholder="URL" class="input-group" />
+			<br />
+			<button type="submit" class="btn btn-dark">Scan</button>
+		</form>
+	</div>
+</div>
+

@@ -1,0 +1,104 @@
+﻿@page
+@model TellMeMore.Pages.urlscan_io.scanModel
+@{
+	ViewData["Title"] = "scan";
+	Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+	<div class="alert alert-info alert-dismissible fade show">
+		Note - Scan may take a couple of minutes. Please do not refresh page.
+		<br />
+		All scans are preformed against urlscan.io API with the 'public' option set to 'off' by default.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
+<h1>urlscan.io Scan</h1>
+
+@if (!string.IsNullOrEmpty(TempData["Error"]?.ToString()))
+{
+	<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+		<div class="alert alert-danger alert-dismissible fade show">
+			@TempData["Error"]?.ToString()
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+}
+
+<div class="form-group">
+	<form method="POST" style="margin-top:2%;">
+		<label style="font-size:large;font-weight:bold">Host URL</label>
+		<input asp-for="HostUrl" type="text" placeholder="URL" class="input-group" />
+		<br />
+		<button type="submit" class="btn btn-dark">Scan</button>
+	</form>
+</div>
+
+@if (Model.UrlScanIo != null)
+{
+	<h4>Initial site information found</h4>
+
+	<p>URL: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.url</p>
+	<p>Remote IP Address: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.remoteIPAddress</p>
+	<p>Remote Port: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.remotePort</p>
+	<p>Remote Protocol: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.protocol</p>
+	<p>Security State: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.securityState</p>
+
+	<hr />
+
+	<h4>Site security information</h4>
+
+	<p>Server Protocol: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.securityDetails.protocol</p>
+	<p>Certificate Cipher Type: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.securityDetails.cipher</p>
+	<p>Certificate Issuer: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.securityDetails.issuer</p>
+	<p>Certificate Subject Name: @Model.UrlScanIo.data?.requests?[0]?.response?.response?.securityDetails.subjectName</p>
+
+	<hr />
+
+	@if (Model.UrlScanIo?.data?.requests?[0]?.response?.response?.securityHeaders?.Length > 0)
+	{
+		<h4>Site security header information</h4>
+
+		foreach (var item in Model.UrlScanIo?.data?.requests?[0]?.response?.response?.securityHeaders)
+		{
+			<p>Name of header: @(item?.name ?? "Header name not found.")</p>
+			<p>Value of header: @(item?.value ?? "Header value not found.")</p>
+		}
+
+		<hr />
+	}
+
+	<h4>Site Technologies used</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Technology detected</th>
+				<th scope="col">Category Name</th>
+				<th scope="col">Category Priority</th>
+				<th scope="col">Confidence Total %</th>
+				<th scope="col">Vendor website detected</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.UrlScanIo?.meta?.processors?.wappa?.data)
+			{
+				<tr>
+					<td>@(item?.app ?? "Not Found.")</td>
+					@foreach (var cat in item.categories)
+					{
+						<td>@(cat?.name ?? "Not Found.")</td>
+						<td>@cat?.priority</td>
+					}
+					<td>@item?.confidenceTotal</td>
+					<td>@(item?.website ?? "Not Found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

@@ -1,0 +1,89 @@
+﻿@page
+@model TellMeMore.Pages.dnsdumpster.scanModel
+@{
+	ViewData["Title"] = "scan";
+	Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+	<div class="alert alert-info alert-dismissible fade show">
+		Note - Scan may take a couple of minutes. Please do not refresh page.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
+<h1>dnsdumpster Scan</h1>
+
+@if (!string.IsNullOrEmpty(TempData["Error"]?.ToString()))
+{
+	<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+		<div class="alert alert-danger alert-dismissible fade show">
+			@TempData["Error"]?.ToString()
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+}
+
+<div class="form-group">
+	<form method="POST" style="margin-top:2%;">
+		<label style="font-size:large;font-weight:bold">Host URL</label>
+		<input asp-for="HostUrl" type="text" placeholder="URL" class="input-group" />
+		<br />
+		<button type="submit" class="btn btn-dark">Scan</button>
+	</form>
+</div>
+
+
+@if (Model?.dnsDumpsterModel?.data?.Count > 0)
+{
+	<h4>Host name @Model.HostUrl</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">DNS Records</th>
+				<th scope="col">Mx Records</th>
+				<th scope="col">Host Records (A records)</th>
+				<th scope="col">Technologies Found</th>
+				<th scope="col">Txt Records</th>
+			</tr>
+		</thead>
+		<tbody>
+				@foreach (var dns in Model.dnsDumpsterModel.data[0])
+				{
+					<tr>
+						<td>@dns</td>
+					</tr>
+					
+				}
+				@foreach (var mx in Model.dnsDumpsterModel.data[1])
+				{
+					<tr>
+						<td>@mx</td>
+					</tr>
+				}
+				@foreach (var host in Model.dnsDumpsterModel.data[2])
+				{
+					<tr>
+						<td>@host</td>
+					</tr>
+				}
+				@foreach (var tech in Model.dnsDumpsterModel.data[3])
+				{
+					<tr>
+						<td>@tech</td>
+					</tr>
+				}
+				@foreach (var txt in Model.dnsDumpsterModel.data[4])
+				{
+					<tr>
+						<td>@txt</td>
+					</tr>
+				}
+			</tbody>
+	</table>
+}

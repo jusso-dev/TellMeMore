@@ -1,0 +1,72 @@
+﻿@page
+@model TellMeMore.Pages.BuiltWith.BuiltWithModel
+@{
+	ViewData["Title"] = "Qualys";
+	Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+	<div class="alert alert-info alert-dismissible fade show">
+		Note - Scan may take a couple of minutes. Please do not refresh page.
+		<br />
+		This scan is intended to provide a high level overview of site technologies used.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
+<h1>BuiltWith Scan</h1>
+
+
+@if (!string.IsNullOrEmpty(TempData["Error"]?.ToString()))
+{
+	<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+		<div class="alert alert-danger alert-dismissible fade show">
+			@TempData["Error"]?.ToString()
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+}
+
+<div class="form-group">
+	<form method="POST" style="margin-top:2%;">
+		<label style="font-size:large;font-weight:bold">Host URL</label>
+		<input asp-for="HostUrl" type="text" placeholder="URL" class="input-group" />
+		<br />
+		<button type="submit" class="btn btn-dark">Scan</button>
+	</form>
+</div>
+
+
+@if (Model?.builtWithModel?.domain.Length > 0)
+{
+	<h4>Host name @Model.builtWithModel?.domain</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Name detected</th>
+				<th scope="col">Live?</th>
+				<th scope="col">Dead?</th>
+				<th scope="col">Categories</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.builtWithModel.groups)
+			{
+				<tr>
+					<td>@(item?.name ?? "Not Found.")</td>
+					<td>@item?.live</td>
+					<td>@item?.dead</td>
+					@foreach (var cat in item.categories)
+					{
+						<td>@(cat?.name ?? "Not Found.")</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
