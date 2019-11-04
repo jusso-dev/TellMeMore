@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TellMeMore.Interfaces;
-using TellMeMore.Models;
+using TellMeMore.Models.DnsDumpster;
 
 namespace TellMeMore.Pages.dnsdumpster
 {

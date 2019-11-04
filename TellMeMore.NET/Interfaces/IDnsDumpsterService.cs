@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TellMeMore.Models;
+using TellMeMore.Models.DnsDumpster;
 
 namespace TellMeMore.Interfaces
 {

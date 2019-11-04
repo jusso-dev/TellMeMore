@@ -14,6 +14,7 @@ txtRecords = []
 
 allRecords = []
 
+
 class DnsDumpster(Resource):
     def get(self, hostUrl):
 
@@ -23,34 +24,38 @@ class DnsDumpster(Resource):
 
         ### Build return object
         for entry in res['dns_records']['dns']:
-            dnsRecords.append("{domain} ({ip}) {as} {provider} {country}".format(**entry))
+            dns = { "dns": "{domain} ({ip}) {as} {provider} {country}".format(**entry) }
+            dnsRecords.append(dns)
 
         for entry in res['dns_records']['mx']:
-            mxRecords.append("{domain} ({ip}) {as} {provider} {country}".format(**entry))
+            mx = { "mx" : "{domain} ({ip}) {as} {provider} {country}".format(**entry) }
+            mxRecords.append(mx)
 
         for entry in res['dns_records']['host']:
             if entry['reverse_dns']:
-                hostRecords.append("{domain} ({reverse_dns}) ({ip}) {as} {provider} {country}".format(**entry))
+                host = { "host": "{domain} ({reverse_dns}) ({ip}) {as} {provider} {country}".format(**entry) }
+                hostRecords.append(host)
             else:
-                hostRecords.append("{domain} ({ip}) {as} {provider} {country}".format(**entry))
+                host = { "host": "{domain} ({ip}) {as} {provider} {country}".format(**entry)}
+                hostRecords.append(host)
 
         for entry in res['dns_records']['host']:
             if entry['header']:
-                if str(entry['header']).lower().__contains__('ssh'):
-                    technologyFound.append("{domain} {header} - OOPS SSH port 22 may be open".format(**entry))
-                else:
-                    technologyFound.append("{domain} {header}".format(**entry))
+                tech = { "tech": "{domain} {header}".format(**entry) }
+                technologyFound.append(tech)
 
         for entry in res['dns_records']['txt']:
-            txtRecords.append(entry)
+            txt = { "txt": entry }
+            txtRecords.append(txt)
 
-        allRecords.append(dnsRecords)
-        allRecords.append(mxRecords)
-        allRecords.append(hostRecords)
-        allRecords.append(technologyFound)
-        allRecords.append(txtRecords)
+        returnObj = { 'dnsRecords': dnsRecords,
+                        'mxRecords': mxRecords,
+                        'hostRecords': hostRecords,
+                        'techFound': technologyFound,
+                        'txtRecords': txtRecords 
+                    }
         
-        return { 'data': allRecords }
+        return returnObj 
 
 class HealthCheck(Resource):
     def get(self):

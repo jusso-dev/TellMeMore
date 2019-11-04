@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using TellMeMore.Interfaces;
 using TellMeMore.Models;
+using TellMeMore.Models.DnsDumpster;
 
 namespace TellMeMore.Services
 {

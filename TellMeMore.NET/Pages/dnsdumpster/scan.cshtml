@@ -4,7 +4,6 @@
 	ViewData["Title"] = "scan";
 	Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-
 <div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
 	<div class="alert alert-info alert-dismissible fade show">
 		Note - Scan may take a couple of minutes. Please do not refresh page.
@@ -27,7 +26,6 @@
 		</div>
 	</div>
 }
-
 <div class="form-group">
 	<form method="POST" style="margin-top:2%;">
 		<label style="font-size:large;font-weight:bold">Host URL</label>
@@ -37,53 +35,97 @@
 	</form>
 </div>
 
-
-@if (Model?.dnsDumpsterModel?.data?.Count > 0)
+@if (Model?.dnsDumpsterModel?.dnsRecords?.Count > 0)
 {
-	<h4>Host name @Model.HostUrl</h4>
+	<h2>Host name @Model.HostUrl</h2>
+
+	<h4>DNS Records</h4>
 
 	<table class="table">
 		<thead>
 			<tr>
 				<th scope="col">DNS Records</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.dnsDumpsterModel?.dnsRecords)
+			{
+				<tr>
+					<td>@(item.dns ?? "DNS Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>MX Records</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
 				<th scope="col">Mx Records</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.dnsDumpsterModel?.mxRecords)
+			{
+				<tr>
+					<td>@(item.mx ?? "MX Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Host (A) Records</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
 				<th scope="col">Host Records (A records)</th>
-				<th scope="col">Technologies Found</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.dnsDumpsterModel?.hostRecords)
+			{
+				<tr>
+					<td>@(item.host ?? "Host Record (A) Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Technology Detected</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Technology Detected</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.dnsDumpsterModel?.techFound)
+			{
+				<tr>
+					<td>@(item.tech ?? "Tech not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Txt Detected</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
 				<th scope="col">Txt Records</th>
 			</tr>
 		</thead>
 		<tbody>
-				@foreach (var dns in Model.dnsDumpsterModel.data[0])
-				{
-					<tr>
-						<td>@dns</td>
-					</tr>
-					
-				}
-				@foreach (var mx in Model.dnsDumpsterModel.data[1])
-				{
-					<tr>
-						<td>@mx</td>
-					</tr>
-				}
-				@foreach (var host in Model.dnsDumpsterModel.data[2])
-				{
-					<tr>
-						<td>@host</td>
-					</tr>
-				}
-				@foreach (var tech in Model.dnsDumpsterModel.data[3])
-				{
-					<tr>
-						<td>@tech</td>
-					</tr>
-				}
-				@foreach (var txt in Model.dnsDumpsterModel.data[4])
-				{
-					<tr>
-						<td>@txt</td>
-					</tr>
-				}
-			</tbody>
+			@foreach (var item in Model.dnsDumpsterModel?.txtRecords)
+			{
+				<tr>
+					<td>@(item.txt ?? "Txt Record not found.")</td>
+				</tr>
+			}
+		</tbody>
 	</table>
 }
