@@ -75,7 +75,6 @@ namespace TellMeMore.Services
 
 				if(res.IsSuccessStatusCode)
 				{
-					var test = await res?.Content?.ReadAsStringAsync();
 					var json = JsonConvert.DeserializeObject<UrlScanIo>(await res?.Content?.ReadAsStringAsync());
 					return json;
 				}
