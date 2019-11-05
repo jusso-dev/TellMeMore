@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TellMeMore.Constants;
@@ -12,8 +13,8 @@ namespace TellMeMore.Services
 {
 	public class UrlScanIoService : IUrlScanIoService
 	{
-		private IHttpClientFactory _httpClientFactory;
-		private ITellMeMoreLogger _config;
+		private readonly IHttpClientFactory _httpClientFactory;
+		private readonly ITellMeMoreLogger _config;
 
 		const string BaseUrlScan = "https://urlscan.io/api/v1/scan/";
 		const string BaseUrlUUID = "https://urlscan.io/api/v1/result/";
@@ -39,7 +40,10 @@ namespace TellMeMore.Services
 
 				var reqObject = new UrlScanIoRequestObject() { url = hostName };
 
-				var res = await client.PostAsJsonAsync(BaseUrlScan, reqObject);
+				var res = await client.PostAsync(BaseUrlScan,
+					new StringContent(
+							JsonConvert.SerializeObject(reqObject), Encoding.UTF8, "application/json")
+						);
 
 				if (res.IsSuccessStatusCode)
 				{
@@ -71,6 +75,7 @@ namespace TellMeMore.Services
 
 				if(res.IsSuccessStatusCode)
 				{
+					var test = await res?.Content?.ReadAsStringAsync();
 					var json = JsonConvert.DeserializeObject<UrlScanIo>(await res?.Content?.ReadAsStringAsync());
 					return json;
 				}

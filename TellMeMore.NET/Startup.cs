@@ -12,6 +12,7 @@ using TellMeMore.Interfaces;
 using TellMeMore.Services;
 using TellMeMore.Shared.ConfigurationLogger;
 using TellMeMore.Shared.Interfaces;
+using Microsoft.Extensions.Hosting;
 
 namespace TellMeMore
 {
@@ -33,7 +34,7 @@ namespace TellMeMore
 			});
 
 			// Register polly enabled http clients
-			IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+			static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
 			{
 				return HttpPolicyExtensions
 					.HandleTransientHttpError()
@@ -58,10 +59,14 @@ namespace TellMeMore
 			// Add Configuration Logger
 			services.AddSingleton<ITellMeMoreLogger, TellMeMoreLogger>();
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			services.AddMvc(e =>
+			{
+				e.EnableEndpointRouting = false;
+
+			}).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 		}
 		
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
 			{
