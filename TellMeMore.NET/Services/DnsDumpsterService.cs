@@ -6,20 +6,22 @@ using Newtonsoft.Json;
 using TellMeMore.Interfaces;
 using TellMeMore.Models;
 using TellMeMore.Models.DnsDumpster;
+using TellMeMore.Shared.ConfigurationLogger;
+using TellMeMore.Shared.Interfaces;
 
 namespace TellMeMore.Services
 {
 	public class DnsDumpsterService : IDnsDumpsterService
 	{
 		private readonly IHttpClientFactory _client;
-		private readonly IConfiguration _config;
+		private readonly ITellMeMoreLogger _config;
 		static string BaseUrl = string.Empty;
-		public DnsDumpsterService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+		public DnsDumpsterService(IHttpClientFactory httpClientFactory, ITellMeMoreLogger configuration)
 		{
 			_client = httpClientFactory;
 			_config = configuration;
 
-			BaseUrl = _config["DnsDumpsterBaseUrl:Url"]?.ToString();
+			BaseUrl = _config.ReadConfiguration(TellMeMoreLogger.DnsDumpsterBaseUrl);
 		}
 
 		public async Task<DnsDumpsterModel> GetAsync(string hostUrl)

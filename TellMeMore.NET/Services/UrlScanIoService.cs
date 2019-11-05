@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using TellMeMore.Constants;
 using TellMeMore.Interfaces;
 using TellMeMore.Models;
+using TellMeMore.Shared.ConfigurationLogger;
+using TellMeMore.Shared.Interfaces;
 
 namespace TellMeMore.Services
 {
 	public class UrlScanIoService : IUrlScanIoService
 	{
 		private IHttpClientFactory _httpClientFactory;
-		private IConfiguration _config;
+		private ITellMeMoreLogger _config;
 
 		const string BaseUrlScan = "https://urlscan.io/api/v1/scan/";
 		const string BaseUrlUUID = "https://urlscan.io/api/v1/result/";
-		public UrlScanIoService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+		public UrlScanIoService(IHttpClientFactory httpClientFactory, ITellMeMoreLogger configuration)
 		{
 			_httpClientFactory = httpClientFactory;
 			_config = configuration;
@@ -30,8 +32,8 @@ namespace TellMeMore.Services
 		{
 			try
 			{
-				var client = _httpClientFactory.CreateClient();
-				string apiKey = _config["UrlScanApiKey:ApiKey"]?.ToString();
+				var client = _httpClientFactory.CreateClient(HttpClientNames.UrlScanIoHttpClient);
+				string apiKey = _config.ReadConfiguration(TellMeMoreLogger.UrlScanApiKey);
 
 				client.DefaultRequestHeaders.Add("API-Key", apiKey);
 
@@ -64,7 +66,7 @@ namespace TellMeMore.Services
 		{
 			try
 			{
-				var client = _httpClientFactory.CreateClient("urlscanio");
+				var client = _httpClientFactory.CreateClient(HttpClientNames.UrlScanIoHttpClient);
 				var res = await client.GetAsync(BaseUrlUUID + uuid);
 
 				if(res.IsSuccessStatusCode)

@@ -5,15 +5,17 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using TellMeMore.Interfaces;
 using TellMeMore.Models.BuiltWithModel;
+using TellMeMore.Shared.ConfigurationLogger;
+using TellMeMore.Shared.Interfaces;
 
 namespace TellMeMore.Services
 {
 	public class BuiltWithService : IBuiltWithService
 	{
 		private readonly IHttpClientFactory _client;
-		private readonly IConfiguration _config;
+		private readonly ITellMeMoreLogger _config;
 		const string BaseUrl = "https://api.builtwith.com/free1/api.json?KEY=";
-		public BuiltWithService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+		public BuiltWithService(IHttpClientFactory httpClientFactory, ITellMeMoreLogger configuration)
 		{
 			_client = httpClientFactory;
 			_config = configuration;
@@ -29,7 +31,7 @@ namespace TellMeMore.Services
 				}
 
 				var client = _client.CreateClient();
-				string apiKey = _config["BuiltWithApiKey:ApiKey"]?.ToString();
+				string apiKey = _config.ReadConfiguration(TellMeMoreLogger.BuiltWithApiKey);
 
 				var res = await client.GetAsync($"{BaseUrl}{apiKey}&LOOKUP={hostUrl}");
 

@@ -10,6 +10,8 @@ using Polly.Extensions.Http;
 using Polly;
 using TellMeMore.Interfaces;
 using TellMeMore.Services;
+using TellMeMore.Shared.ConfigurationLogger;
+using TellMeMore.Shared.Interfaces;
 
 namespace TellMeMore
 {
@@ -47,11 +49,14 @@ namespace TellMeMore
 				.SetHandlerLifetime(TimeSpan.FromMinutes(1))
 				.AddPolicyHandler(GetRetryPolicy());
 
+			// Add services
 			services.AddSingleton<IQualysService, QualysService>();
-			services.AddSingleton<IMxtoolboxService, MxtoolboxService>();
 			services.AddSingleton<IUrlScanIoService, UrlScanIoService>();
 			services.AddSingleton<IBuiltWithService, BuiltWithService>();
 			services.AddSingleton<IDnsDumpsterService, DnsDumpsterService>();
+			
+			// Add Configuration Logger
+			services.AddSingleton<ITellMeMoreLogger, TellMeMoreLogger>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}

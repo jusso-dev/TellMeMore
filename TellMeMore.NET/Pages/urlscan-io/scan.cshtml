@@ -4,7 +4,6 @@
 	ViewData["Title"] = "scan";
 	Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-
 <div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
 	<div class="alert alert-info alert-dismissible fade show">
 		Note - Scan may take a couple of minutes. Please do not refresh page.
@@ -15,9 +14,7 @@
 		</button>
 	</div>
 </div>
-
 <h1>urlscan.io Scan</h1>
-
 @if (!string.IsNullOrEmpty(TempData["Error"]?.ToString()))
 {
 	<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
@@ -29,7 +26,6 @@
 		</div>
 	</div>
 }
-
 <div class="form-group">
 	<form method="POST" style="margin-top:2%;">
 		<label style="font-size:large;font-weight:bold">Host URL</label>
@@ -38,7 +34,6 @@
 		<button type="submit" class="btn btn-dark">Scan</button>
 	</form>
 </div>
-
 @if (Model.UrlScanIo != null)
 {
 	<h4>Initial site information found</h4>
@@ -73,32 +68,36 @@
 		<hr />
 	}
 
-	<h4>Site Technologies used</h4>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">Technology detected</th>
-				<th scope="col">Category Name</th>
-				<th scope="col">Category Priority</th>
-				<th scope="col">Confidence Total %</th>
-				<th scope="col">Vendor website detected</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in Model.UrlScanIo?.meta?.processors?.wappa?.data)
-			{
+	@if (Model.UrlScanIo?.meta?.processors?.wappa?.data.Length > 0)
+	{
+		<h4>Site Technologies used</h4>
+
+		<table class="table">
+			<thead>
 				<tr>
-					<td>@(item?.app ?? "Not Found.")</td>
-					@foreach (var cat in item.categories)
-					{
-						<td>@(cat?.name ?? "Not Found.")</td>
-						<td>@cat?.priority</td>
-					}
-					<td>@item?.confidenceTotal</td>
-					<td>@(item?.website ?? "Not Found.")</td>
+					<th scope="col">Technology detected</th>
+					<th scope="col">Category Name</th>
+					<th scope="col">Category Priority</th>
+					<th scope="col">Confidence Total %</th>
+					<th scope="col">Vendor website detected</th>
 				</tr>
-			}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.UrlScanIo?.meta?.processors?.wappa?.data)
+				{
+					<tr>
+						<td>@(item?.app ?? "Not Found.")</td>
+						@foreach (var cat in item.categories)
+						{
+							<td>@(cat?.name ?? "Not Found.")</td>
+							<td>@cat?.priority</td>
+						}
+						<td>@item?.confidenceTotal</td>
+						<td>@(item?.website ?? "Not Found.")</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
 }

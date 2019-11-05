@@ -35,9 +35,9 @@ namespace TellMeMore.Pages.dnsdumpster
 
 				return Page();
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				TempData["Error"] = ex.Message;
+				TempData["Error"] = "An error occurred. Please try again later.";
 				return Page();
 			}
 		}
