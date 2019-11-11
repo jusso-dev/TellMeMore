@@ -90,9 +90,8 @@ namespace TellMeMore
 			app.UseCsp(opts => opts
 				.FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com/"))
 				.FormActions(s => s.Self())
-				.FrameAncestors(s => s.Self())
-				.ScriptSources(s => s.Self()
-				.CustomSources("https://www.google.com/recaptcha/api.js"))
+				.FrameAncestors(s => s.Self()
+				.CustomSources("https://www.google.com/recaptcha/api.js", "https://www.gstatic.com/"))
 			);
 
 #if DEBUG

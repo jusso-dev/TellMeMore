@@ -5,17 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TellMeMore.Exceptions;
 using TellMeMore.Interfaces;
+using TellMeMore.Shared.ConfigurationLogger;
+using TellMeMore.Shared.Interfaces;
 
 namespace TellMeMore.Pages.BuiltWith
 {
 	[ValidateAntiForgeryToken]
     public class BuiltWithModel : PageModel
     {
-		private IBuiltWithService _builtWithService;
-		public BuiltWithModel(IBuiltWithService builtWithService)
+		private readonly IBuiltWithService _builtWithService;
+		private readonly ITellMeMoreLogger _tellMeMoreLogger;
+		public BuiltWithModel(IBuiltWithService builtWithService, ITellMeMoreLogger tellMeMoreLogger)
 		{
 			_builtWithService = builtWithService;
+			_tellMeMoreLogger = tellMeMoreLogger;
 		}
+
+		[BindProperty]
+		public string RecaptchaKey { get; set; }
 
 		[BindProperty]
 		public string HostUrl { get; set; }
@@ -25,12 +32,15 @@ namespace TellMeMore.Pages.BuiltWith
 
 		public IActionResult OnGetAsync()
         {
+			RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 			return Page();
         }
 		public async Task<IActionResult> OnPostAsync()
 		{
 			try
 			{
+				RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+
 				builtWithModel = await _builtWithService.GetAsync(HostUrl);
 				return Page();
 			}

@@ -5,17 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TellMeMore.Interfaces;
 using TellMeMore.Models;
+using TellMeMore.Shared.ConfigurationLogger;
+using TellMeMore.Shared.Interfaces;
 
 namespace TellMeMore.Pages.urlscan_io
 {
 	[ValidateAntiForgeryToken]
 	public class scanModel : PageModel
     {
-		private IUrlScanIoService _urlScanIoService;
-		public scanModel(IUrlScanIoService urlScanIoService)
+		private readonly IUrlScanIoService _urlScanIoService;
+		private readonly ITellMeMoreLogger _tellMeMoreLogger;
+		public scanModel(IUrlScanIoService urlScanIoService, ITellMeMoreLogger tellMeMoreLogger)
 		{
 			_urlScanIoService = urlScanIoService;
+			_tellMeMoreLogger = tellMeMoreLogger;
 		}
+
+		[BindProperty]
+		public string RecaptchaKey { get; set; }
 
 		[BindProperty]
 		public string HostUrl { get; set; }
@@ -25,6 +32,7 @@ namespace TellMeMore.Pages.urlscan_io
 
 		public IActionResult OnGetAsync()
 		{
+			RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 			return Page();
 		}
 		
@@ -32,6 +40,8 @@ namespace TellMeMore.Pages.urlscan_io
 		{
 			try
 			{
+				RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+
 				var res = await _urlScanIoService.PostAsync(HostUrl);
 				UrlScanIo = await _urlScanIoService.GetStatusAsync(res.uuid);
 

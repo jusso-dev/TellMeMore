@@ -21,10 +21,12 @@ namespace TellMeMore.Shared.ConfigurationLogger
 		public const string UrlScanApiKey = "UrlScanApiKey:ApiKey";
 		public const string BuiltWithApiKey = "BuiltWithApiKey:ApiKey";
 		public const string DnsDumpsterBaseUrl = "DnsDumpsterBaseUrl:Url";
+		public const string RecapchaKey = "Recaptcha:Key";
 #else
 		public const string UrlScanApiKey = "UrlScanApiKey";
 		public const string BuiltWithApiKey = "BuiltWithApiKey";
 		public const string DnsDumpsterBaseUrl = "DnsDumpsterBaseUrl"; 
+		public const string RecapchaKey = "RecaptchaKey";
 #endif
 
 		/// <summary>

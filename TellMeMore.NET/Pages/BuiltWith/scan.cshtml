@@ -5,6 +5,15 @@
 	Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+<head>
+	<script nws-csp-add-nonce="true" src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<script nws-csp-add-nonce="true">
+       function onSubmit(token) {
+         document.getElementById("scan-form").submit();
+       }
+     </script>
+</head>
+
 <div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
 	<div class="alert alert-info alert-dismissible fade show">
 		Note - Scan may take a couple of minutes. Please do not refresh page.
@@ -32,11 +41,11 @@
 }
 
 <div class="form-group">
-	<form method="POST" style="margin-top:2%;">
+	<form method="POST" style="margin-top:2%;" id="scan-form">
 		<label style="font-size:large;font-weight:bold">Host URL</label>
 		<input asp-for="HostUrl" type="text" placeholder="URL" class="input-group" />
 		<br />
-		<button type="submit" class="btn btn-dark">Scan</button>
+		<button type="submit" class="g-recaptcha" data-sitekey="@Model.RecaptchaKey" data-callback='onSubmit'>Scan</button>
 	</form>
 </div>
 

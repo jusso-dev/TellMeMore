@@ -4,17 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SslLabsLib.Objects;
 using TellMeMore.Interfaces;
+using TellMeMore.Shared.ConfigurationLogger;
+using TellMeMore.Shared.Interfaces;
 
 namespace TellMeMore.Pages.Qualys
 {
 	[ValidateAntiForgeryToken]
 	public class QualysModel : PageModel
     {
-		private IQualysService _qualysService;
-		public QualysModel(IQualysService qualysService)
+		private readonly IQualysService _qualysService;
+		private readonly ITellMeMoreLogger _tellMeMoreLogger;
+		public QualysModel(IQualysService qualysService, ITellMeMoreLogger tellMeMoreLogger)
 		{
 			_qualysService = qualysService;
+			_tellMeMoreLogger = tellMeMoreLogger;
 		}
+
+		[BindProperty]
+		public string RecaptchaKey { get; set; }
 
 		[BindProperty]
 		public string HostUrl { get; set; }
@@ -24,6 +31,7 @@ namespace TellMeMore.Pages.Qualys
 
 		public IActionResult OnGetAsync()
         {
+			RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 			return Page();
         }
 
@@ -31,7 +39,9 @@ namespace TellMeMore.Pages.Qualys
 		{
 			try
 			{
-				if(string.IsNullOrEmpty(HostUrl))
+				RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+
+				if (string.IsNullOrEmpty(HostUrl))
 				{
 					TempData["Error"] = "URL is not valid. Please re-enter URL and try again.";
 					return Page();

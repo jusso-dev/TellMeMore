@@ -5,17 +5,24 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using TellMeMore.Exceptions;
 using TellMeMore.Interfaces;
 using TellMeMore.Models.DnsDumpster;
+using TellMeMore.Shared.ConfigurationLogger;
+using TellMeMore.Shared.Interfaces;
 
 namespace TellMeMore.Pages.dnsdumpster
 {
 	[ValidateAntiForgeryToken]
 	public class scanModel : PageModel
     {
-		private IDnsDumpsterService _dnsDumpsterService;
-		public scanModel(IDnsDumpsterService dnsDumpsterService)
+		private readonly IDnsDumpsterService _dnsDumpsterService;
+		private readonly ITellMeMoreLogger _tellMeMoreLogger;
+		public scanModel(IDnsDumpsterService dnsDumpsterService, ITellMeMoreLogger tellMeMoreLogger)
 		{
 			_dnsDumpsterService = dnsDumpsterService;
+			_tellMeMoreLogger = tellMeMoreLogger;
 		}
+
+		[BindProperty]
+		public string RecaptchaKey { get; set; }
 
 		[BindProperty]
 		public string HostUrl { get; set; }
@@ -25,6 +32,7 @@ namespace TellMeMore.Pages.dnsdumpster
 
 		public IActionResult OnGetAsync()
 		{
+			RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 			return Page();
 		}
 
@@ -32,8 +40,9 @@ namespace TellMeMore.Pages.dnsdumpster
 		{
 			try
 			{
-				dnsDumpsterModel = await _dnsDumpsterService.GetAsync(HostUrl);
+				RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 
+				dnsDumpsterModel = await _dnsDumpsterService.GetAsync(HostUrl);
 				return Page();
 			}
 			catch(DnsDumpsterException ex)
