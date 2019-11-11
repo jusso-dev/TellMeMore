@@ -5,8 +5,9 @@ Web app to collectively preform reconnaissance on web hosted solutions
 
 - Qualys SSL Labs Scan
 - urlscan.io Scan
-- dnsdumpster Scan - (coming soon..)
+- dnsdumpster Scan
 - BuiltWith Scan
+- Bulk Scan (all sites) Scan
 - PDF export - (coming soon..)
 - Excel export - (coming soon..)
 
