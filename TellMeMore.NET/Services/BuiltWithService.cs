@@ -43,7 +43,7 @@ namespace TellMeMore.Services
 				}
 				else if (res.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
 				{
-					throw new UrlScanIoException("We're quite busy at the moment, please try again in a minute or so.");
+					throw new urlScanIoException("We're quite busy at the moment, please try again in a minute or so.");
 				}
 				else
 				{

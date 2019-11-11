@@ -44,3 +44,280 @@
 
 </div>
 
+@if (Model?.combindedModel?.builtWithModel?.domain?.Length > 0)
+{
+	<h1>BuiltWith Scan</h1>
+
+	<h4>Host name @Model.combindedModel.builtWithModel?.domain</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Name detected</th>
+				<th scope="col">Live?</th>
+				<th scope="col">Dead?</th>
+				<th scope="col">Categories</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.combindedModel.builtWithModel.groups)
+			{
+				<tr>
+					<td>@(item?.name ?? "Not Found.")</td>
+					<td>@item?.live</td>
+					<td>@item?.dead</td>
+					@foreach (var cat in item.categories)
+					{
+						<td>@(cat?.name ?? "Not Found.")</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@if (Model?.combindedModel?.dnsDumpsterModel?.dnsRecords?.Count > 0)
+{
+	<h1>dnsdumpster Scan</h1>
+
+	<h2>Host name @Model.HostUrl</h2>
+
+	<h4>DNS Records</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">DNS Records</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.combindedModel.dnsDumpsterModel?.dnsRecords)
+			{
+				<tr>
+					<td>@(item.dns ?? "DNS Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>MX Records</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Mx Records</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.combindedModel.dnsDumpsterModel?.mxRecords)
+			{
+				<tr>
+					<td>@(item.mx ?? "MX Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Host (A) Records</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Host Records (A records)</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.combindedModel.dnsDumpsterModel?.hostRecords)
+			{
+				<tr>
+					<td>@(item.host ?? "Host Record (A) Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Technology Detected</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Technology Detected</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.combindedModel.dnsDumpsterModel?.techFound)
+			{
+				<tr>
+					<th scope="row">@(item.tech ?? "Tech not found.")</th>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Txt Detected</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Txt Records</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.combindedModel.dnsDumpsterModel?.txtRecords)
+			{
+				<tr>
+					<td>@(item.txt ?? "Txt Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@if (Model?.combindedModel?.analysis?.Host != null && Model?.combindedModel?.analysis?.Status != SslLabsLib.Enums.AnalysisStatus.ERROR)
+{
+	<h1>Qualys SSL Labs Scan</h1>
+
+	<p><strong>Host name:</strong> @Model.combindedModel.analysis.Host</p>
+	<p><strong>Certificate Issuer Label:</strong> @Model.combindedModel.analysis.Endpoints[0].Details.Cert.IssuerLabel</p>
+	<p><strong>Certificate Signature Algorithm:</strong> @Model.combindedModel.analysis.Endpoints[0].Details.Cert.SigAlg</p>
+
+	foreach (var item in Model?.combindedModel.analysis?.Endpoints)
+	{
+		switch (item.Grade)
+		{
+			case "A+":
+				<p style="color:lightgreen;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "A":
+				<p style="color:lightgreen;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "B":
+				<p style="color:lightblue;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "C":
+				<p style="color:lightyellow;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "D":
+				<p style="color:yellow;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "E":
+				<p style="color:darkred;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "F":
+				<p style="color:red;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			default:
+				<p style="color:gray;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+
+		}
+	}
+
+	<br />
+	<br />
+
+	<p>
+
+		<button style="margin-top:1%;margin-bottom:1%;" class="btn btn-dark" data-toggle="collapse" data-target="#cipers"><strong>Show Server ciphers</strong></button>
+
+		<div id="cipers" class="collapse">
+			@foreach (var item in Model?.combindedModel?.analysis?.Endpoints)
+			{
+				foreach (var cipher in item.Details.Suites.List)
+				{
+			<p><strong>Name:</strong> @cipher.Name</p>
+			<p><strong>Cipher Strength:</strong> @cipher.CipherStrength</p>
+			<p><strong>Dh Strength:</strong> @(cipher.DhStrength ?? "Not Found")</p>
+			<p><strong>Dh bits:</strong> @(cipher.DhYs ?? "Not Found")</p>
+			<p><strong>ECDH Strength:</strong> @cipher.EcdhStrength</p>
+			<p><strong>ECDH bits:</strong> @cipher.EcdhStrength</p>
+		}
+	}
+			</div>
+
+			<button style="margin-top:1%;margin-bottom:1%;" class="btn btn-dark" data-toggle="collapse" data-target="#protocols"><strong>Show Protocols</strong></button>
+
+			<div id="protocols" class="collapse">
+				@foreach (var item in Model?.combindedModel?.analysis?.Endpoints)
+				{
+					foreach (var proto in item.Details.Protocols)
+					{
+						<p><strong>Name:</strong> @proto.Name</p>
+						<p><strong>V2 Suites Disabled:</strong> @(proto.V2SuitesDisabled ?? "Not Found")</p>
+						<p><strong>Version:</strong> @proto.Version</p>
+					}
+				}
+			</div>
+			</p>
+		}
+
+
+@if (Model?.combindedModel?.urlScanIo != null)
+{
+	<h1>urlscan.io Scan</h1>
+
+	<h4>Initial site information found</h4>
+
+	<p>URL: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.url</p>
+	<p>Remote IP Address: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.remoteIPAddress</p>
+	<p>Remote Port: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.remotePort</p>
+	<p>Remote Protocol: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.protocol</p>
+	<p>Security State: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityState</p>
+
+	<hr />
+
+	<h4>Site security information</h4>
+
+	<p>Server Protocol: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityDetails.protocol</p>
+	<p>Certificate Cipher Type: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityDetails.cipher</p>
+	<p>Certificate Issuer: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityDetails.issuer</p>
+	<p>Certificate Subject Name: @Model?.combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityDetails.subjectName</p>
+
+	<hr />
+
+	@if (Model?.combindedModel?.urlScanIo?.data?.requests?[0]?.response?.response?.securityHeaders?.Length > 0)
+	{
+		<h4>Site security header information</h4>
+
+		foreach (var item in Model?.combindedModel?.urlScanIo?.data?.requests?[0]?.response?.response?.securityHeaders)
+		{
+			<p>Name of header: @(item?.name ?? "Header name not found.")</p>
+			<p>Value of header: @(item?.value ?? "Header value not found.")</p>
+		}
+
+		<hr />
+	}
+
+
+	@if (Model?.combindedModel?.urlScanIo?.meta?.processors?.wappa?.data.Length > 0)
+	{
+		<h4>Site Technologies used</h4>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Technology detected</th>
+					<th scope="col">Category</th>
+					<th scope="col">Confidence Total %</th>
+					<th scope="col">Vendor website detected</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model?.combindedModel?.urlScanIo?.meta?.processors?.wappa?.data)
+				{
+					<tr>
+						<td>@(item?.app ?? "Not Found.")</td>
+						@foreach (var cat in item.categories)
+						{
+							<td>@(cat?.name ?? "Not Found.")</td>
+						}
+						<td>@item?.confidenceTotal</td>
+						<td>@(item?.website ?? "Not Found.")</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+}

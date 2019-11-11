@@ -28,7 +28,7 @@ namespace TellMeMore.Pages.urlscan_io
 		public string HostUrl { get; set; }
 
 		[BindProperty]
-		public UrlScanIo UrlScanIo { get; set; }
+		public urlScanIo UrlScanIo { get; set; }
 
 		public IActionResult OnGetAsync()
 		{

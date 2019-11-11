@@ -8,7 +8,7 @@ namespace TellMeMore.Interfaces
 {
 	public interface IUrlScanIoService
 	{
-		Task<UrlScanIoNewScanResponse> PostAsync(string hostName);
-		Task<UrlScanIo> GetStatusAsync(string uuid);
+		Task<urlScanIoNewScanResponse> PostAsync(string hostName);
+		Task<urlScanIo> GetStatusAsync(string uuid);
 	}
 }

@@ -48,8 +48,8 @@ namespace TellMeMore
 					.WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 			}
 
-			// Register urlscanio client polly implementation
-			services.AddHttpClient(HttpClientNames.UrlScanIoHttpClient)
+			// Register urlScanIo client polly implementation
+			services.AddHttpClient(HttpClientNames.urlScanIoHttpClient)
 				.SetHandlerLifetime(TimeSpan.FromMinutes(1))
 				.AddPolicyHandler(GetRetryPolicy());
 

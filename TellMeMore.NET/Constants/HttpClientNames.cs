@@ -7,6 +7,6 @@ namespace TellMeMore.Constants
 {
 	public class HttpClientNames
 	{
-		public const string UrlScanIoHttpClient = "urlscanio";
+		public const string urlScanIoHttpClient = "urlScanIo";
 	}
 }

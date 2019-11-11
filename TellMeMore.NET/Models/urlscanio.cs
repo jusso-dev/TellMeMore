@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace TellMeMore.Models
 {
-	public class UrlScanIoNewScanResponse
+	public class urlScanIoNewScanResponse
 	{
 		public string message { get; set; }
 		public string uuid { get; set; }
@@ -21,9 +21,9 @@ namespace TellMeMore.Models
 
 
 	/// <summary>
-	/// Used as POST data to Urlscanio API end-point
+	/// Used as POST data to urlScanIo API end-point
 	/// </summary>
-	public class UrlScanIoRequestObject
+	public class urlScanIoRequestObject
 	{
 		public string url { get; set; }
 		[JsonProperty("public")]
@@ -31,11 +31,11 @@ namespace TellMeMore.Models
 	}
 
 	/// <summary>
-	/// Response data from Urlscanio API end-point
+	/// Response data from urlScanIo API end-point
 	/// </summary>
 	/// 
 
-	public class UrlScanIo
+	public class urlScanIo
 	{
 		public Data data { get; set; }
 		public Stats stats { get; set; }

@@ -2,17 +2,17 @@
 
 namespace TellMeMore.Exceptions
 {
-	public class UrlScanIoException : Exception
+	public class urlScanIoException : Exception
 	{
-		public UrlScanIoException()
+		public urlScanIoException()
 		{
 
 		}
-		public UrlScanIoException(string message) : base(message)
+		public urlScanIoException(string message) : base(message)
 		{
 
 		}
-		public UrlScanIoException(string message, Exception ex) : base(message, ex)
+		public urlScanIoException(string message, Exception ex) : base(message, ex)
 		{
 
 		}

@@ -30,16 +30,16 @@ namespace TellMeMore.Services
 		/// </summary>
 		/// <param name="hostName"></param>
 		/// <returns></returns>
-		public async Task<UrlScanIoNewScanResponse> PostAsync(string hostName)
+		public async Task<urlScanIoNewScanResponse> PostAsync(string hostName)
 		{
 			try
 			{
-				var client = _httpClientFactory.CreateClient(HttpClientNames.UrlScanIoHttpClient);
+				var client = _httpClientFactory.CreateClient(HttpClientNames.urlScanIoHttpClient);
 				string apiKey = _config.ReadConfiguration(TellMeMoreLogger.UrlScanApiKey);
 
 				client.DefaultRequestHeaders.Add("API-Key", apiKey);
 
-				var reqObject = new UrlScanIoRequestObject() { url = hostName };
+				var reqObject = new urlScanIoRequestObject() { url = hostName };
 
 				var res = await client.PostAsync(BaseUrlScan,
 					new StringContent(
@@ -48,12 +48,12 @@ namespace TellMeMore.Services
 
 				if (res.IsSuccessStatusCode)
 				{
-					var json = JsonConvert.DeserializeObject<UrlScanIoNewScanResponse>(await res?.Content?.ReadAsStringAsync());
+					var json = JsonConvert.DeserializeObject<urlScanIoNewScanResponse>(await res?.Content?.ReadAsStringAsync());
 					return json;
 				}
 				else if(res.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
 				{
-					throw new UrlScanIoException("We're quite busy at the moment, please try again in a minute or so.");
+					throw new urlScanIoException("We're quite busy at the moment, please try again in a minute or so.");
 				}
 				else
 				{
@@ -71,16 +71,16 @@ namespace TellMeMore.Services
 		/// </summary>
 		/// <param name="uuid">UUID of previously preformed scan</param>
 		/// <returns></returns>
-		public async Task<UrlScanIo> GetStatusAsync(string uuid)
+		public async Task<urlScanIo> GetStatusAsync(string uuid)
 		{
 			try
 			{
-				var client = _httpClientFactory.CreateClient(HttpClientNames.UrlScanIoHttpClient);
+				var client = _httpClientFactory.CreateClient(HttpClientNames.urlScanIoHttpClient);
 				var res = await client.GetAsync(BaseUrlUUID + uuid);
 
 				if(res.IsSuccessStatusCode)
 				{
-					var json = JsonConvert.DeserializeObject<UrlScanIo>(await res?.Content?.ReadAsStringAsync());
+					var json = JsonConvert.DeserializeObject<urlScanIo>(await res?.Content?.ReadAsStringAsync());
 					return json;
 				}
 				else
