@@ -13,6 +13,8 @@ using TellMeMore.Services;
 using TellMeMore.Shared.ConfigurationLogger;
 using TellMeMore.Shared.Interfaces;
 using Microsoft.Extensions.Hosting;
+using TellMeMore.Constants;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace TellMeMore
 {
@@ -29,8 +31,9 @@ namespace TellMeMore
 		{
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
+				options.HttpOnly = HttpOnlyPolicy.Always;
+				options.Secure = CookieSecurePolicy.Always;
 			});
 
 			// Register polly enabled http clients
@@ -46,7 +49,7 @@ namespace TellMeMore
 			}
 
 			// Register urlscanio client polly implementation
-			services.AddHttpClient("urlscanio")
+			services.AddHttpClient(HttpClientNames.UrlScanIoHttpClient)
 				.SetHandlerLifetime(TimeSpan.FromMinutes(1))
 				.AddPolicyHandler(GetRetryPolicy());
 
@@ -75,8 +78,22 @@ namespace TellMeMore
 			else
 			{
 				app.UseExceptionHandler("/Error");
-				app.UseHsts();
+				app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains());
 			}
+
+			
+			app.UseXContentTypeOptions();
+			app.UseReferrerPolicy(opts => opts.NoReferrer());
+			app.UseXXssProtection(options => options.EnabledWithBlockMode());
+			app.UseXfo(options => options.Deny());
+
+			app.UseCsp(opts => opts
+				.FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com/"))
+				.FormActions(s => s.Self())
+				.FrameAncestors(s => s.Self())
+				.ScriptSources(s => s.Self()
+				.CustomSources("https://www.google.com/recaptcha/api.js"))
+			);
 
 #if DEBUG
 #else

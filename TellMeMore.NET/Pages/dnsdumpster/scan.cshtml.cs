@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using TellMeMore.Exceptions;
 using TellMeMore.Interfaces;
 using TellMeMore.Models.DnsDumpster;
 
@@ -33,6 +34,12 @@ namespace TellMeMore.Pages.dnsdumpster
 			{
 				dnsDumpsterModel = await _dnsDumpsterService.GetAsync(HostUrl);
 
+				return Page();
+			}
+			catch(DnsDumpsterException ex)
+			{
+				// Safe to return to user
+				TempData["Error"] = ex.Message;
 				return Page();
 			}
 			catch (Exception)

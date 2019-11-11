@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using TellMeMore.Exceptions;
 using TellMeMore.Interfaces;
 using TellMeMore.Models;
 using TellMeMore.Models.DnsDumpster;
@@ -42,10 +43,9 @@ namespace TellMeMore.Services
 					var json = JsonConvert.DeserializeObject<DnsDumpsterModel>(await res?.Content?.ReadAsStringAsync());
 					return json;
 				}
-
 				else
 				{
-					throw new HttpRequestException($"Request to end-point {BaseUrl} failed. Code was: {res?.StatusCode}");
+					throw new DnsDumpsterException($"Request to end-point {BaseUrl} failed. Code was: {res?.StatusCode}");
 				}
 			}
 			catch (Exception ex)

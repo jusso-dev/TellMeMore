@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TellMeMore.Constants;
+using TellMeMore.Exceptions;
 using TellMeMore.Interfaces;
 using TellMeMore.Models;
 using TellMeMore.Shared.ConfigurationLogger;
@@ -49,6 +50,10 @@ namespace TellMeMore.Services
 				{
 					var json = JsonConvert.DeserializeObject<UrlScanIoNewScanResponse>(await res?.Content?.ReadAsStringAsync());
 					return json;
+				}
+				else if(res.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+				{
+					throw new UrlScanIoException("We're quite busy at the moment, please try again in a minute or so.");
 				}
 				else
 				{

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using TellMeMore.Exceptions;
 using TellMeMore.Interfaces;
 using TellMeMore.Models.BuiltWithModel;
 using TellMeMore.Shared.ConfigurationLogger;
@@ -40,7 +41,10 @@ namespace TellMeMore.Services
 					var json = JsonConvert.DeserializeObject<BuiltWithModel>(await res?.Content?.ReadAsStringAsync());
 					return json;
 				}
-
+				else if (res.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+				{
+					throw new UrlScanIoException("We're quite busy at the moment, please try again in a minute or so.");
+				}
 				else
 				{
 					throw new HttpRequestException($"Request to end-point {BaseUrl} failed. Code was: {res?.StatusCode}");

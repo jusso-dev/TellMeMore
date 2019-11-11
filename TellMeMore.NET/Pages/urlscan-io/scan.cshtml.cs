@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -34,6 +35,11 @@ namespace TellMeMore.Pages.urlscan_io
 				var res = await _urlScanIoService.PostAsync(HostUrl);
 				UrlScanIo = await _urlScanIoService.GetStatusAsync(res.uuid);
 
+				return Page();
+			}
+			catch (HttpRequestException ex)
+			{
+				TempData["Error"] = ex.Message;
 				return Page();
 			}
 			catch (Exception)
