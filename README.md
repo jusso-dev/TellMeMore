@@ -1,6 +1,9 @@
 # TellMeMore
 Web app to collectively preform reconnaissance on web hosted solutions
 
+## Build status
+[![Build status](https://dev.azure.com/JustinMiddler/TellMeMore/_apis/build/status/TellMeMore-CI)](https://dev.azure.com/JustinMiddler/TellMeMore/_build/latest?definitionId=9)
+
 ## Features
 
 - Qualys SSL Labs Scan
