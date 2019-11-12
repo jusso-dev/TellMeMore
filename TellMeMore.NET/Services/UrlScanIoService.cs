@@ -35,7 +35,7 @@ namespace TellMeMore.Services
 			try
 			{
 				var client = _httpClientFactory.CreateClient(HttpClientNames.urlScanIoHttpClient);
-				string apiKey = _config.ReadConfiguration(TellMeMoreLogger.UrlScanApiKey);
+				string apiKey = await _config.ReadConfiguration(TellMeMoreLogger.UrlScanApiKey);
 
 				client.DefaultRequestHeaders.Add("API-Key", apiKey);
 

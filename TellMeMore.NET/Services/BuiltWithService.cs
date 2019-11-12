@@ -32,7 +32,7 @@ namespace TellMeMore.Services
 				}
 
 				var client = _client.CreateClient();
-				string apiKey = _config.ReadConfiguration(TellMeMoreLogger.BuiltWithApiKey);
+				string apiKey = await _config.ReadConfiguration(TellMeMoreLogger.BuiltWithApiKey);
 
 				var res = await client.GetAsync($"{BaseUrl}{apiKey}&LOOKUP={hostUrl}");
 

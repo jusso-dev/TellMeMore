@@ -30,9 +30,9 @@ namespace TellMeMore.Pages.dnsdumpster
 		[BindProperty]
 		public DnsDumpsterModel dnsDumpsterModel { get; set; }
 
-		public IActionResult OnGetAsync()
+		public async Task<IActionResult> OnGetAsync()
 		{
-			RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+			RecaptchaKey = await _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 			return Page();
 		}
 
@@ -40,7 +40,7 @@ namespace TellMeMore.Pages.dnsdumpster
 		{
 			try
 			{
-				RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+				RecaptchaKey = await _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 
 				dnsDumpsterModel = await _dnsDumpsterService.GetAsync(HostUrl);
 				return Page();

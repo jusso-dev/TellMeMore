@@ -29,9 +29,9 @@ namespace TellMeMore.Pages.Qualys
 		[BindProperty]
 		public Analysis Analysis { get; set; }
 
-		public IActionResult OnGetAsync()
+		public async Task<IActionResult> OnGetAsync()
         {
-			RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+			RecaptchaKey = await _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 			return Page();
         }
 
@@ -39,7 +39,7 @@ namespace TellMeMore.Pages.Qualys
 		{
 			try
 			{
-				RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+				RecaptchaKey = await _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 
 				if (string.IsNullOrEmpty(HostUrl))
 				{

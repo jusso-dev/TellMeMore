@@ -22,7 +22,7 @@ namespace TellMeMore.Services
 			_client = httpClientFactory;
 			_config = configuration;
 
-			BaseUrl = _config.ReadConfiguration(TellMeMoreLogger.DnsDumpsterBaseUrl);
+			BaseUrl = _config.ReadConfiguration(TellMeMoreLogger.DnsDumpsterBaseUrl)?.Result;
 		}
 
 		public async Task<DnsDumpsterModel> GetAsync(string hostUrl)

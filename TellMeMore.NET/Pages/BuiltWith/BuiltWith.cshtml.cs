@@ -30,16 +30,16 @@ namespace TellMeMore.Pages.BuiltWith
 		[BindProperty]
 		public Models.BuiltWithModel.BuiltWithModel builtWithModel { get; set; }
 
-		public IActionResult OnGetAsync()
+		public async Task<IActionResult> OnGetAsync()
         {
-			RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+			RecaptchaKey = await _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 			return Page();
         }
 		public async Task<IActionResult> OnPostAsync()
 		{
 			try
 			{
-				RecaptchaKey = _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
+				RecaptchaKey = await _tellMeMoreLogger.ReadConfiguration(TellMeMoreLogger.RecapchaKey);
 
 				builtWithModel = await _builtWithService.GetAsync(HostUrl);
 				return Page();
