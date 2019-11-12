@@ -5,8 +5,9 @@ Web app to collectively preform reconnaissance on web hosted solutions
 
 - Qualys SSL Labs Scan
 - urlscan.io Scan
-- dnsdumpster Scan - (coming soon..)
+- dnsdumpster Scan
 - BuiltWith Scan
+- Bulk Scan (all sites) Scan
 - PDF export - (coming soon..)
 - Excel export - (coming soon..)
 
@@ -16,6 +17,7 @@ Web app to collectively preform reconnaissance on web hosted solutions
 - Restore and Build sln/project
 - Go to https://urlscan.io and sign up for a free API key
 - Go to https://api.builtwith.com/free-api and sign up for a free API key
+- Go to https://www.google.com/recaptcha/admin and get new V2 "invisible" recaptcha client key
 - Ensure API keys are in application.Development.json file
 - cd to /dnsdumpster-PythonAPI and run 'pip install requirements.txt'
 - In the same directory after install has completed run 'python main.py' to start API
