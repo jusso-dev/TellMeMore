@@ -1,0 +1,151 @@
+﻿@page "/Qualys/scan"
+@inject TellMeMoreBlazor.Interfaces.IQualysService IQualysService
+
+<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+	<div class="alert alert-info alert-dismissible fade show">
+		Note - Scan may take a couple of minutes. Please do not refresh page.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+
+<h1>Qualys SSLlabs Scan</h1>
+
+
+@if (!string.IsNullOrEmpty(Error))
+{
+	<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+		<div class="alert alert-danger alert-dismissible fade show">
+			@Error
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+}
+
+@if (!string.IsNullOrEmpty(Loading))
+{
+	<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+		<div class="alert alert-info alert-dismissible fade show">
+			@Loading
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+}
+
+<div class="form-group">
+	<label style="font-size:large;font-weight:bold">Host URL</label>
+	<input @bind="@HostUrl" type="text" placeholder="URL" class="input-group" />
+	<br />
+	<button @onclick="@LoadResultsAsync" type="submit" class="btn btn-dark">Scan</button>
+</div>
+
+
+@if (Analysis?.Host != null)
+{
+	<p><strong>Host name:</strong> @Analysis.Host</p>
+	<p><strong>Certificate Issuer Label:</strong> @Analysis.Endpoints[0].Details.Cert.IssuerLabel</p>
+	<p><strong>Certificate Signature Algorithm:</strong> @Analysis.Endpoints[0].Details.Cert.SigAlg</p>
+
+	foreach (var item in Analysis.Endpoints)
+	{
+		switch (item.Grade)
+		{
+			case "A+":
+				<p style="color:lightgreen;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "A":
+				<p style="color:lightgreen;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "B":
+				<p style="color:lightblue;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "C":
+				<p style="color:lightyellow;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "D":
+				<p style="color:yellow;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "E":
+				<p style="color:darkred;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "F":
+				<p style="color:red;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			default:
+				<p style="color:gray;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+
+		}
+	}
+
+	<br />
+	<br />
+
+	<p>
+
+		<button style="margin-top:1%;margin-bottom:1%;" class="btn btn-dark" data-toggle="collapse" data-target="#cipers"><strong>Show Server ciphers</strong></button>
+
+		<div id="cipers" class="collapse">
+			@foreach (var item in Analysis.Endpoints)
+			{
+				foreach (var cipher in item.Details.Suites.List)
+				{
+			<p><strong>Name:</strong> @cipher.Name</p>
+			<p><strong>Cipher Strength:</strong> @cipher.CipherStrength</p>
+			<p><strong>Dh Strength:</strong> @(cipher.DhStrength ?? "Not Found")</p>
+			<p><strong>Dh bits:</strong> @(cipher.DhYs ?? "Not Found")</p>
+			<p><strong>ECDH Strength:</strong> @cipher.EcdhStrength</p>
+			<p><strong>ECDH bits:</strong> @cipher.EcdhStrength</p>
+		}
+	}
+			</div>
+
+			<button style="margin-top:1%;margin-bottom:1%;" class="btn btn-dark" data-toggle="collapse" data-target="#protocols"><strong>Show Protocols</strong></button>
+
+			<div id="protocols" class="collapse">
+				@foreach (var item in Analysis.Endpoints)
+				{
+					foreach (var proto in item.Details.Protocols)
+					{
+						<p><strong>Name:</strong> @proto.Name</p>
+						<p><strong>V2 Suites Disabled:</strong> @(proto.V2SuitesDisabled ?? "Not Found")</p>
+						<p><strong>Version:</strong> @proto.Version</p>
+					}
+				}
+			</div>
+			</p>
+		}
+
+@code
+{
+	public string Error { get; set; }
+	public string Loading { get; set; }
+	public string HostUrl { get; set; }
+	public SslLabsLib.Objects.Analysis Analysis { get; set; } = new SslLabsLib.Objects.Analysis();
+
+	async Task LoadResultsAsync()
+	{
+		try
+		{
+			Loading = "Scan running .. Please Wait...";
+			Analysis = await IQualysService.QualysReport(HostUrl);
+
+			Loading = string.Empty;
+		}
+		catch (HttpRequestException ex)
+		{
+			Loading = string.Empty;
+			Error = ex.Message;
+		}
+		catch (Exception)
+		{
+			Loading = string.Empty;
+			Error = "An error occurred. Please try again later.";
+		}
+	}
+}

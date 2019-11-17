@@ -1,0 +1,365 @@
+﻿@page "/"
+@inject TellMeMoreBlazor.Interfaces.IBuiltWithService IBuiltWithService
+@inject TellMeMoreBlazor.Interfaces.IDnsDumpsterService IDnsDumpsterService
+@inject TellMeMoreBlazor.Interfaces.IQualysService IQualysService
+@inject TellMeMoreBlazor.Interfaces.IUrlScanIoService IUrlScanIoService
+
+<div class="text-center">
+	<h1 class="display-4"><strong><em>TellMeMore</em></strong></h1>
+	<p>This tool is used to preform reconnaissance on a target web hosted solution.</p>
+</div>
+
+<div class="text-center" style="margin-top:5%">
+	<h4>IMPORTANT</h4>
+
+	<p>
+		By using this site, you agree to the terms and conditions set out by the retrospective site owners.
+		<br />
+		Attempt to abuse the vendors endpoints using <em>TellMeMore</em> will result in a permanent IP blacklist.
+	</p>
+</div>
+
+<div class="text-center" style="margin-top:5%">
+
+	<h2>In a rush?</h2>
+	<h4>Bulk scan all tests below.</h4>
+
+	@if (!string.IsNullOrEmpty(Error))
+	{
+		<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+			<div class="alert alert-danger alert-dismissible fade show">
+				@Error
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	}
+	@if (!string.IsNullOrEmpty(loadingStatus))
+	{
+		<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+			<div class="alert alert-info alert-dismissible fade show">
+				@loadingStatus
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	}
+
+	<div class="form-group">
+		<label style="font-size:large;font-weight:bold">Host URL</label>
+		<input @bind="@HostUrl" type="text" placeholder="URL" class="input-group" />
+		<br />
+		<button type="submit" @onclick="@GetAllResultsAsync" class="btn btn-dark">Scan</button>
+	</div>
+
+</div>
+
+@if (combindedModel?.builtWithModel != null)
+{
+	<h1>BuiltWith Scan</h1>
+
+	<h4>Host name @combindedModel.builtWithModel?.domain</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Name detected</th>
+				<th scope="col">Live?</th>
+				<th scope="col">Dead?</th>
+				<th scope="col">Categories</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in combindedModel.builtWithModel.groups)
+			{
+				<tr>
+					<td>@(item?.name ?? "Not Found.")</td>
+					<td>@item?.live</td>
+					<td>@item?.dead</td>
+					@foreach (var cat in item.categories)
+					{
+						<td>@(cat?.name ?? "Not Found.")</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@if (combindedModel?.dnsDumpsterModel != null)
+{
+	<h1>dnsdumpster Scan</h1>
+
+	<h2>Host name @HostUrl</h2>
+
+	<h4>DNS Records</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">DNS Records</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in combindedModel.dnsDumpsterModel?.dnsRecords)
+			{
+				<tr>
+					<td>@(item.dns ?? "DNS Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>MX Records</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Mx Records</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in combindedModel.dnsDumpsterModel?.mxRecords)
+			{
+				<tr>
+					<td>@(item.mx ?? "MX Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Host (A) Records</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Host Records (A records)</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in combindedModel.dnsDumpsterModel?.hostRecords)
+			{
+				<tr>
+					<td>@(item.host ?? "Host Record (A) Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Technology Detected</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Technology Detected</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in combindedModel.dnsDumpsterModel?.techFound)
+			{
+				<tr>
+					<th scope="row">@(item.tech ?? "Tech not found.")</th>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<h4>Txt Detected</h4>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Txt Records</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in combindedModel.dnsDumpsterModel?.txtRecords)
+			{
+				<tr>
+					<td>@(item.txt ?? "Txt Record not found.")</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@if (combindedModel?.analysis?.Host != null)
+{
+	<h1>Qualys SSL Labs Scan</h1>
+
+	<p><strong>Host name:</strong> @combindedModel.analysis.Host</p>
+	<p><strong>Certificate Issuer Label:</strong> @combindedModel.analysis.Endpoints[0].Details.Cert.IssuerLabel</p>
+	<p><strong>Certificate Signature Algorithm:</strong> @combindedModel.analysis.Endpoints[0].Details.Cert.SigAlg</p>
+
+	foreach (var item in combindedModel.analysis?.Endpoints)
+	{
+		switch (item.Grade)
+		{
+			case "A+":
+				<p style="color:lightgreen;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "A":
+				<p style="color:lightgreen;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "B":
+				<p style="color:lightblue;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "C":
+				<p style="color:lightyellow;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "D":
+				<p style="color:yellow;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "E":
+				<p style="color:darkred;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			case "F":
+				<p style="color:red;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+			default:
+				<p style="color:gray;"><strong>Host @item.IpAddress Grade: @item.Grade</strong></p>
+				break;
+
+		}
+	}
+
+	<br />
+	<br />
+
+	<p>
+
+		<button style="margin-top:1%;margin-bottom:1%;" class="btn btn-dark" data-toggle="collapse" data-target="#cipers"><strong>Show Server ciphers</strong></button>
+
+		<div id="cipers" class="collapse">
+			@foreach (var item in combindedModel?.analysis?.Endpoints)
+			{
+				foreach (var cipher in item.Details.Suites.List)
+				{
+			<p><strong>Name:</strong> @cipher.Name</p>
+			<p><strong>Cipher Strength:</strong> @cipher.CipherStrength</p>
+			<p><strong>Dh Strength:</strong> @(cipher.DhStrength ?? "Not Found")</p>
+			<p><strong>Dh bits:</strong> @(cipher.DhYs ?? "Not Found")</p>
+			<p><strong>ECDH Strength:</strong> @cipher.EcdhStrength</p>
+			<p><strong>ECDH bits:</strong> @cipher.EcdhStrength</p>
+		}
+	}
+			</div>
+
+			<button style="margin-top:1%;margin-bottom:1%;" class="btn btn-dark" data-toggle="collapse" data-target="#protocols"><strong>Show Protocols</strong></button>
+
+			<div id="protocols" class="collapse">
+				@foreach (var item in combindedModel?.analysis?.Endpoints)
+				{
+					foreach (var proto in item.Details.Protocols)
+					{
+						<p><strong>Name:</strong> @proto.Name</p>
+						<p><strong>V2 Suites Disabled:</strong> @(proto.V2SuitesDisabled ?? "Not Found")</p>
+						<p><strong>Version:</strong> @proto.Version</p>
+					}
+				}
+			</div>
+			</p>
+		}
+
+
+@if (combindedModel?.urlScanIo != null)
+{
+	<h1>urlscan.io Scan</h1>
+
+	<h4>Initial site information found</h4>
+
+	<p>URL: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.url</p>
+	<p>Remote IP Address: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.remoteIPAddress</p>
+	<p>Remote Port: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.remotePort</p>
+	<p>Remote Protocol: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.protocol</p>
+	<p>Security State: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityState</p>
+
+	<hr />
+
+	<h4>Site security information</h4>
+
+	<p>Server Protocol: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityDetails.protocol</p>
+	<p>Certificate Cipher Type: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityDetails.cipher</p>
+	<p>Certificate Issuer: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityDetails.issuer</p>
+	<p>Certificate Subject Name: @combindedModel?.urlScanIo.data?.requests?[0]?.response?.response?.securityDetails.subjectName</p>
+
+	<hr />
+
+	@if (combindedModel?.urlScanIo?.data?.requests?[0]?.response?.response?.securityHeaders?.Length > 0)
+	{
+		<h4>Site security header information</h4>
+
+		foreach (var item in combindedModel?.urlScanIo?.data?.requests?[0]?.response?.response?.securityHeaders)
+		{
+			<p>Name of header: @(item?.name ?? "Header name not found.")</p>
+			<p>Value of header: @(item?.value ?? "Header value not found.")</p>
+		}
+
+		<hr />
+	}
+
+
+	@if (combindedModel?.urlScanIo != null)
+	{
+		<h4>Site Technologies used</h4>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Technology detected</th>
+					<th scope="col">Category</th>
+					<th scope="col">Confidence Total %</th>
+					<th scope="col">Vendor website detected</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in combindedModel?.urlScanIo?.meta?.processors?.wappa?.data)
+				{
+					<tr>
+						<td>@(item?.app ?? "Not Found.")</td>
+						@foreach (var cat in item.categories)
+						{
+							<td>@(cat?.name ?? "Not Found.")</td>
+						}
+						<td>@item?.confidenceTotal</td>
+						<td>@(item?.website ?? "Not Found.")</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+}
+
+@code {
+
+	public string Error { get; set; }
+	public string loadingStatus { get; set; }
+	public string HostUrl { get; set; }
+	public TellMeMoreBlazor.Models.CombinedModel combindedModel { get; set; } = new TellMeMoreBlazor.Models.CombinedModel();
+
+	async Task GetAllResultsAsync()
+	{
+		try
+		{
+			loadingStatus = "Starting Scans... Please wait...";
+
+			combindedModel.builtWithModel = await IBuiltWithService.GetAsync(HostUrl);
+			combindedModel.dnsDumpsterModel = await IDnsDumpsterService.GetAsync(HostUrl);
+			combindedModel.analysis = await IQualysService.QualysReport(HostUrl);
+
+			var res = await IUrlScanIoService.PostAsync(HostUrl);
+			combindedModel.urlScanIo = await IUrlScanIoService.GetStatusAsync(res.uuid);
+
+			loadingStatus = "Finished all scans.";
+		}
+		catch (Exception)
+		{
+			loadingStatus = string.Empty;
+			Error = "One or more errors occurred. Please try again later.";
+		}
+	}
+}

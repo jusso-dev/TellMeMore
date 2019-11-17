@@ -1,0 +1,143 @@
+﻿@page "/urlscan-io/scan"
+@inject TellMeMoreBlazor.Interfaces.IUrlScanIoService IUrlScanIoService
+
+<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+	<div class="alert alert-info alert-dismissible fade show">
+		Note - Scan may take a couple of minutes. Please do not refresh page.
+		<br />
+		All scans are preformed against urlscan.io API with the 'public' option set to 'off' by default.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</div>
+<h1>urlscan.io Scan</h1>
+
+@if (!string.IsNullOrEmpty(Error))
+{
+	<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+		<div class="alert alert-danger alert-dismissible fade show">
+			@Error
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+}
+
+@if (!string.IsNullOrEmpty(Loading))
+{
+	<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
+		<div class="alert alert-info alert-dismissible fade show">
+			@Loading
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+}
+
+<div class="form-group">
+	<label style="font-size:large;font-weight:bold">Host URL</label>
+	<input @bind="@HostUrl" type="text" placeholder="URL" class="input-group" />
+	<br />
+	<button @onclick="@LoadResultsAsync" type="submit" class="btn btn-dark">Scan</button>
+</div>
+
+
+@if (UrlScanIo.data?.requests?[0]?.response?.response?.url != null)
+{
+	<h4>Initial site information found</h4>
+
+	<p>URL: @UrlScanIo.data?.requests?[0]?.response?.response?.url</p>
+	<p>Remote IP Address: @UrlScanIo.data?.requests?[0]?.response?.response?.remoteIPAddress</p>
+	<p>Remote Port: @UrlScanIo.data?.requests?[0]?.response?.response?.remotePort</p>
+	<p>Remote Protocol: @UrlScanIo.data?.requests?[0]?.response?.response?.protocol</p>
+	<p>Security State: @UrlScanIo.data?.requests?[0]?.response?.response?.securityState</p>
+
+	<hr />
+
+	<h4>Site security information</h4>
+
+	<p>Server Protocol: @UrlScanIo.data?.requests?[0]?.response?.response?.securityDetails.protocol</p>
+	<p>Certificate Cipher Type: @UrlScanIo.data?.requests?[0]?.response?.response?.securityDetails.cipher</p>
+	<p>Certificate Issuer: @UrlScanIo.data?.requests?[0]?.response?.response?.securityDetails.issuer</p>
+	<p>Certificate Subject Name: @UrlScanIo.data?.requests?[0]?.response?.response?.securityDetails.subjectName</p>
+
+	<hr />
+
+	@if (UrlScanIo?.data?.requests?[0]?.response?.response?.securityHeaders?.Length > 0)
+	{
+		<h4>Site security header information</h4>
+
+		foreach (var item in UrlScanIo?.data?.requests?[0]?.response?.response?.securityHeaders)
+		{
+			<p>Name of header: @(item?.name ?? "Header name not found.")</p>
+			<p>Value of header: @(item?.value ?? "Header value not found.")</p>
+		}
+
+		<hr />
+	}
+
+
+	@if (UrlScanIo?.meta?.processors?.wappa?.data.Length > 0)
+	{
+		<h4>Site Technologies used</h4>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Technology detected</th>
+					<th scope="col">Category</th>
+					<th scope="col">Confidence Total %</th>
+					<th scope="col">Vendor website detected</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in UrlScanIo?.meta?.processors?.wappa?.data)
+				{
+					<tr>
+						<td>@(item?.app ?? "Not Found.")</td>
+						@foreach (var cat in item.categories)
+						{
+							<td>@(cat?.name ?? "Not Found.")</td>
+						}
+						<td>@item?.confidenceTotal</td>
+						<td>@(item?.website ?? "Not Found.")</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+}
+
+@code
+{
+	public string Error { get; set; }
+	public string Loading { get; set; }
+	public string HostUrl { get; set; }
+	public TellMeMoreBlazor.Models.urlscanio.urlScanIo UrlScanIo { get; set; } = new Models.urlscanio.urlScanIo();
+
+	async Task LoadResultsAsync()
+	{
+		try
+		{
+			Loading = "Scan running .. Please Wait...";
+
+			var res = await IUrlScanIoService.PostAsync(HostUrl);
+			UrlScanIo = await IUrlScanIoService.GetStatusAsync(res?.uuid);
+
+			Loading = string.Empty;
+		}
+		catch (HttpRequestException ex)
+		{
+			Loading = string.Empty;
+			Error = ex.Message;
+		}
+		catch (Exception)
+		{
+			Loading = string.Empty;
+			Error = "An error occurred. Please try again later.";
+		}
+	}
+}

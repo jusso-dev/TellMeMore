@@ -1,0 +1,8 @@
+C:\Users\A_Justin.Midler\source\repos\TellMeMoreBlazor\TellMeMoreBlazor.Shared\bin\Debug\netstandard2.0\TellMeMoreBlazor.Shared.deps.json
+C:\Users\A_Justin.Midler\source\repos\TellMeMoreBlazor\TellMeMoreBlazor.Shared\bin\Debug\netstandard2.0\TellMeMoreBlazor.Shared.dll
+C:\Users\A_Justin.Midler\source\repos\TellMeMoreBlazor\TellMeMoreBlazor.Shared\obj\Debug\netstandard2.0\TellMeMoreBlazor.Shared.csprojAssemblyReference.cache
+C:\Users\A_Justin.Midler\source\repos\TellMeMoreBlazor\TellMeMoreBlazor.Shared\obj\Debug\netstandard2.0\TellMeMoreBlazor.Shared.AssemblyInfoInputs.cache
+C:\Users\A_Justin.Midler\source\repos\TellMeMoreBlazor\TellMeMoreBlazor.Shared\obj\Debug\netstandard2.0\TellMeMoreBlazor.Shared.AssemblyInfo.cs
+C:\Users\A_Justin.Midler\source\repos\TellMeMoreBlazor\TellMeMoreBlazor.Shared\bin\Debug\netstandard2.0\TellMeMoreBlazor.Shared.pdb
+C:\Users\A_Justin.Midler\source\repos\TellMeMoreBlazor\TellMeMoreBlazor.Shared\obj\Debug\netstandard2.0\TellMeMoreBlazor.Shared.dll
+C:\Users\A_Justin.Midler\source\repos\TellMeMoreBlazor\TellMeMoreBlazor.Shared\obj\Debug\netstandard2.0\TellMeMoreBlazor.Shared.pdb
