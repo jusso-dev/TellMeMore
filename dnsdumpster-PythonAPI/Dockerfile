@@ -6,5 +6,4 @@ RUN cd /app
 RUN pip install flask
 RUN pip install flask_restful
 RUN pip install dnsdumpster
-ENTRYPOINT [ "python" ]
-CMD [ "main.py" ]
+CMD ["python", "/app/main.py", "runserver", "0.0.0.0:80"]
