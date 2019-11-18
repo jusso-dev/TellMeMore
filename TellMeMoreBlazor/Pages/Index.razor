@@ -4,6 +4,10 @@
 @inject TellMeMoreBlazor.Interfaces.IQualysService IQualysService
 @inject TellMeMoreBlazor.Interfaces.IUrlScanIoService IUrlScanIoService
 
+<head>
+	<link rel="stylesheet" href="/css/spinner.css" />
+</head>
+
 <div class="text-center">
 	<h1 class="display-4"><strong><em>TellMeMore</em></strong></h1>
 	<p>This tool is used to preform reconnaissance on a target web hosted solution.</p>
@@ -11,7 +15,6 @@
 
 <div class="text-center" style="margin-top:5%">
 	<h4>IMPORTANT</h4>
-
 	<p>
 		By using this site, you agree to the terms and conditions set out by the retrospective site owners.
 		<br />
@@ -35,28 +38,77 @@
 			</div>
 		</div>
 	}
-	@if (!string.IsNullOrEmpty(loadingStatus))
-	{
-		<div class="col-md-12" style="margin-top:2%;margin-bottom:2%;">
-			<div class="alert alert-info alert-dismissible fade show">
-				@loadingStatus
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-		</div>
-	}
-
-	<div class="form-group">
-		<label style="font-size:large;font-weight:bold">Host URL</label>
-		<input @bind="@HostUrl" type="text" placeholder="URL" class="input-group" />
-		<br />
-		<button type="submit" @onclick="@GetAllResultsAsync" class="btn btn-dark">Scan</button>
-	</div>
-
 </div>
 
-@if (combindedModel?.builtWithModel != null)
+<div style="margin: auto; width: 50%;">
+	<label style="font-size:large;font-weight:bold">Host URL</label>
+	<input @bind="@HostUrl" type="text" placeholder="URL" class="input-group" />
+	<br />
+	<button type="submit" @onclick="@RunBulkScanAsync" class="btn btn-dark">Scan</button>
+
+	<div style="margin-top:1%;margin-bottom:1%">
+		@if (BuiltWithLoading)
+		{
+			<p style="font-weight:bold;color:white;">BuiltWith scan running....</p>
+
+			<div class="sk-chase">
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+			</div>
+		}
+	</div>
+	<div style="margin-top:1%;margin-bottom:1%">
+		@if (DnsDumpsterLoading)
+		{
+			<p style="font-weight:bold;color:white;">dnsdumpster scan running....</p>
+
+			<div class="sk-chase">
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+			</div>
+		}
+	</div>
+	<div style="margin-top:1%;margin-bottom:1%">
+		@if (QualysLoading)
+		{
+			<p style="font-weight:bold;color:white;">Qualys SSL Labs scan running....</p>
+
+			<div class="sk-chase">
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+			</div>
+		}
+	</div>
+	<div style="margin-top:1%;margin-bottom:1%">
+		@if (UrlScanIoLoading)
+		{
+			<p style="font-weight:bold;color:white;">urlscan.io scan running....</p>
+
+			<div class="sk-chase">
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+				<div class="sk-chase-dot"></div>
+			</div>
+		}
+	</div>
+</div>
+
+@if (combindedModel?.builtWithModel?.domain != null)
 {
 	<h1>BuiltWith Scan</h1>
 
@@ -72,17 +124,20 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var item in combindedModel.builtWithModel.groups)
+			@if (combindedModel?.builtWithModel != null)
 			{
-				<tr>
-					<td>@(item?.name ?? "Not Found.")</td>
-					<td>@item?.live</td>
-					<td>@item?.dead</td>
-					@foreach (var cat in item.categories)
-					{
-						<td>@(cat?.name ?? "Not Found.")</td>
-					}
-				</tr>
+				@foreach (var item in combindedModel?.builtWithModel?.groups)
+				{
+					<tr>
+						<td>@(item?.name ?? "Not Found.")</td>
+						<td>@item?.live</td>
+						<td>@item?.dead</td>
+						@foreach (var cat in item.categories)
+						{
+							<td>@(cat?.name ?? "Not Found.")</td>
+						}
+					</tr>
+				}
 			}
 		</tbody>
 	</table>
@@ -186,7 +241,6 @@
 	</table>
 }
 
-
 @if (combindedModel?.analysis?.Host != null)
 {
 	<h1>Qualys SSL Labs Scan</h1>
@@ -265,7 +319,6 @@
 			</p>
 		}
 
-
 @if (combindedModel?.urlScanIo != null)
 {
 	<h1>urlscan.io Scan</h1>
@@ -336,30 +389,53 @@
 
 @code {
 
+	public bool BuiltWithLoading { get; set; }
+	public bool DnsDumpsterLoading { get; set; }
+	public bool QualysLoading { get; set; }
+	public bool UrlScanIoLoading { get; set; }
+
 	public string Error { get; set; }
-	public string loadingStatus { get; set; }
 	public string HostUrl { get; set; }
 	public TellMeMoreBlazor.Models.CombinedModel combindedModel { get; set; } = new TellMeMoreBlazor.Models.CombinedModel();
 
-	async Task GetAllResultsAsync()
+	async Task RunBulkScanAsync()
 	{
 		try
 		{
-			loadingStatus = "Starting Scans... Please wait...";
+			BuiltWithLoading = true;
+			DnsDumpsterLoading = true;
+			QualysLoading = true;
+			UrlScanIoLoading = true;
+
+			this.StateHasChanged();
 
 			combindedModel.builtWithModel = await IBuiltWithService.GetAsync(HostUrl);
+			BuiltWithLoading = false;
+			this.StateHasChanged();
+
 			combindedModel.dnsDumpsterModel = await IDnsDumpsterService.GetAsync(HostUrl);
+			DnsDumpsterLoading = false;
+			this.StateHasChanged();
+
 			combindedModel.analysis = await IQualysService.QualysReport(HostUrl);
+			QualysLoading = false;
+			this.StateHasChanged();
 
 			var res = await IUrlScanIoService.PostAsync(HostUrl);
 			combindedModel.urlScanIo = await IUrlScanIoService.GetStatusAsync(res.uuid);
 
-			loadingStatus = "Finished all scans.";
+			UrlScanIoLoading = false;
+			this.StateHasChanged();
 		}
 		catch (Exception)
 		{
-			loadingStatus = string.Empty;
-			Error = "One or more errors occurred. Please try again later.";
+			Error = "One or more errors occurred.";
+			BuiltWithLoading = false;
+			DnsDumpsterLoading = false;
+			QualysLoading = false;
+			UrlScanIoLoading = false;
+
+			this.StateHasChanged();
 		}
 	}
 }
