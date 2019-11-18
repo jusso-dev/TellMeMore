@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor\\TellMeMoreBlazor.csproj": {}
+    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor\\TellMeMoreBlazor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {
+    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
         "projectName": "TellMeMoreBlazor.Shared",
-        "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
+        "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
         "packagesPath": "C:\\Users\\A_Justin.Midler\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\obj\\",
+        "outputPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -77,14 +77,14 @@
         }
       }
     },
-    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor\\TellMeMoreBlazor.csproj": {
+    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor\\TellMeMoreBlazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor\\TellMeMoreBlazor.csproj",
+        "projectUniqueName": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor\\TellMeMoreBlazor.csproj",
         "projectName": "TellMeMoreBlazor",
-        "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor\\TellMeMoreBlazor.csproj",
+        "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor\\TellMeMoreBlazor.csproj",
         "packagesPath": "C:\\Users\\A_Justin.Midler\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor\\obj\\",
+        "outputPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -106,8 +106,8 @@
         "frameworks": {
           "netcoreapp3.0": {
             "projectReferences": {
-              "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {
-                "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj"
+              "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {
+                "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj"
               }
             }
           }
@@ -121,6 +121,16 @@
       "frameworks": {
         "netcoreapp3.0": {
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "Microsoft.Extensions.Http.Polly": {
               "target": "Package",
               "version": "[3.0.0, )"

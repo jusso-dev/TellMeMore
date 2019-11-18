@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {}
+    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {
+    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
         "projectName": "TellMeMoreBlazor.Shared",
-        "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
+        "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
         "packagesPath": "C:\\Users\\A_Justin.Midler\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMoreBlazor\\TellMeMoreBlazor.Shared\\obj\\",
+        "outputPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
