@@ -2,6 +2,7 @@ FROM python:3.7.5-alpine
 
 COPY . /app
 WORKDIR /app
+RUN cd /app
 RUN pip install -r requirements.txt
 ENTRYPOINT [ "python" ]
 CMD [ "main.py" ]
