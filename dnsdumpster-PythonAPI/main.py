@@ -19,6 +19,12 @@ class DnsDumpster(Resource):
     def get(self, hostUrl):
 
         allRecords = []
+        
+        dnsRecords = []
+        mxRecords = []
+        hostRecords = []
+        technologyFound = []
+        txtRecords = []
 
         res = DNSDumpsterAPI().search(hostUrl)
 
@@ -67,4 +73,4 @@ api.add_resource(HealthCheck, '/ping')
 api.init_app(app)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=8080)

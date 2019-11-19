@@ -1,5 +1,4 @@
 ﻿@page "/"
-@inject TellMeMoreBlazor.Interfaces.IBuiltWithService IBuiltWithService
 @inject TellMeMoreBlazor.Interfaces.IDnsDumpsterService IDnsDumpsterService
 @inject TellMeMoreBlazor.Interfaces.IQualysService IQualysService
 @inject TellMeMoreBlazor.Interfaces.IUrlScanIoService IUrlScanIoService
@@ -47,21 +46,6 @@
 	<button type="submit" @onclick="@RunBulkScanAsync" class="btn btn-dark">Scan</button>
 
 	<div style="margin-top:1%;margin-bottom:1%">
-		@if (BuiltWithLoading)
-		{
-			<p style="font-weight:bold;color:white;">BuiltWith scan running....</p>
-
-			<div class="sk-chase">
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-			</div>
-		}
-	</div>
-	<div style="margin-top:1%;margin-bottom:1%">
 		@if (DnsDumpsterLoading)
 		{
 			<p style="font-weight:bold;color:white;">dnsdumpster scan running....</p>
@@ -107,42 +91,6 @@
 		}
 	</div>
 </div>
-
-@if (combindedModel?.builtWithModel?.domain != null)
-{
-	<h1>BuiltWith Scan</h1>
-
-	<h4>Host name @combindedModel.builtWithModel?.domain</h4>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">Name detected</th>
-				<th scope="col">Live?</th>
-				<th scope="col">Dead?</th>
-				<th scope="col">Categories</th>
-			</tr>
-		</thead>
-		<tbody>
-			@if (combindedModel?.builtWithModel != null)
-			{
-				@foreach (var item in combindedModel?.builtWithModel?.groups)
-				{
-					<tr>
-						<td>@(item?.name ?? "Not Found.")</td>
-						<td>@item?.live</td>
-						<td>@item?.dead</td>
-						@foreach (var cat in item.categories)
-						{
-							<td>@(cat?.name ?? "Not Found.")</td>
-						}
-					</tr>
-				}
-			}
-		</tbody>
-	</table>
-}
-
 
 @if (combindedModel?.dnsDumpsterModel != null)
 {
@@ -241,7 +189,7 @@
 	</table>
 }
 
-@if (combindedModel?.analysis?.Host != null)
+@if (combindedModel?.analysis != null)
 {
 	<h1>Qualys SSL Labs Scan</h1>
 
@@ -293,14 +241,14 @@
 			{
 				foreach (var cipher in item.Details.Suites.List)
 				{
-			<p><strong>Name:</strong> @cipher.Name</p>
-			<p><strong>Cipher Strength:</strong> @cipher.CipherStrength</p>
-			<p><strong>Dh Strength:</strong> @(cipher.DhStrength ?? "Not Found")</p>
-			<p><strong>Dh bits:</strong> @(cipher.DhYs ?? "Not Found")</p>
-			<p><strong>ECDH Strength:</strong> @cipher.EcdhStrength</p>
-			<p><strong>ECDH bits:</strong> @cipher.EcdhStrength</p>
-		}
-	}
+					<p><strong>Name:</strong> @cipher.Name</p>
+					<p><strong>Cipher Strength:</strong> @cipher.CipherStrength</p>
+					<p><strong>Dh Strength:</strong> @(cipher.DhStrength ?? "Not Found")</p>
+					<p><strong>Dh bits:</strong> @(cipher.DhYs ?? "Not Found")</p>
+					<p><strong>ECDH Strength:</strong> @cipher.EcdhStrength</p>
+					<p><strong>ECDH bits:</strong> @cipher.EcdhStrength</p>
+				}
+			}
 			</div>
 
 			<button style="margin-top:1%;margin-bottom:1%;" class="btn btn-dark" data-toggle="collapse" data-target="#protocols"><strong>Show Protocols</strong></button>
@@ -389,7 +337,6 @@
 
 @code {
 
-	public bool BuiltWithLoading { get; set; }
 	public bool DnsDumpsterLoading { get; set; }
 	public bool QualysLoading { get; set; }
 	public bool UrlScanIoLoading { get; set; }
@@ -402,15 +349,14 @@
 	{
 		try
 		{
-			BuiltWithLoading = true;
 			DnsDumpsterLoading = true;
 			QualysLoading = true;
 			UrlScanIoLoading = true;
 
-			this.StateHasChanged();
+			combindedModel.dnsDumpsterModel = null;
+			combindedModel.analysis = null;
+			combindedModel.urlScanIo = null;
 
-			combindedModel.builtWithModel = await IBuiltWithService.GetAsync(HostUrl);
-			BuiltWithLoading = false;
 			this.StateHasChanged();
 
 			combindedModel.dnsDumpsterModel = await IDnsDumpsterService.GetAsync(HostUrl);
@@ -430,7 +376,6 @@
 		catch (Exception)
 		{
 			Error = "One or more errors occurred.";
-			BuiltWithLoading = false;
 			DnsDumpsterLoading = false;
 			QualysLoading = false;
 			UrlScanIoLoading = false;
