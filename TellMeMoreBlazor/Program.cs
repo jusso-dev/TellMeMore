@@ -22,6 +22,8 @@ namespace TellMeMoreBlazor
 			Host.CreateDefaultBuilder(args)
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
+                    webBuilder.UseKestrel(s => s.AddServerHeader = false);
+                    webBuilder.UseUrls("http://*:80");
 					webBuilder.UseStartup<Startup>();
 				});
 	}

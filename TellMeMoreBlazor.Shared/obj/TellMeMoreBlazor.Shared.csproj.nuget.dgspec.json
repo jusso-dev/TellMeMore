@@ -1,34 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {}
+    "/Users/justinmiddler/Documents/code-projects/TellMeMore/TellMeMoreBlazor.Shared/TellMeMoreBlazor.Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj": {
+    "/Users/justinmiddler/Documents/code-projects/TellMeMore/TellMeMoreBlazor.Shared/TellMeMoreBlazor.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
+        "projectUniqueName": "/Users/justinmiddler/Documents/code-projects/TellMeMore/TellMeMoreBlazor.Shared/TellMeMoreBlazor.Shared.csproj",
         "projectName": "TellMeMoreBlazor.Shared",
-        "projectPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\TellMeMoreBlazor.Shared.csproj",
-        "packagesPath": "C:\\Users\\A_Justin.Midler\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\A_Justin.Midler\\source\\repos\\TellMeMore\\TellMeMoreBlazor.Shared\\obj\\",
+        "projectPath": "/Users/justinmiddler/Documents/code-projects/TellMeMore/TellMeMoreBlazor.Shared/TellMeMoreBlazor.Shared.csproj",
+        "packagesPath": "/Users/justinmiddler/.nuget/packages/",
+        "outputPath": "/Users/justinmiddler/Documents/code-projects/TellMeMore/TellMeMoreBlazor.Shared/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\A_Justin.Midler\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "/Users/justinmiddler/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://nuget.syncfusion.com/nuget_aspnetcore-js2/nuget/getsyncfusionpackages/aspnetcore-js2": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netstandard2.0": {
@@ -73,7 +68,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/3.0.101/RuntimeIdentifierGraph.json"
         }
       }
     }

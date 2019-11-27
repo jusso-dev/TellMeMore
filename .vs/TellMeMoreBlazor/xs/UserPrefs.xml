@@ -1,0 +1,27 @@
+﻿<Properties StartupConfiguration="{E21D4330-643C-433B-A890-C8D304ECFDD1}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="TellMeMoreBlazor/Program.cs">
+    <Files>
+      <File FileName="TellMeMoreBlazor/Startup.cs" Line="43" Column="36" />
+      <File FileName="TellMeMoreBlazor.Shared/ConfigurationLogger/TellMeMoreLogger.cs" Line="24" Column="2" />
+      <File FileName="TellMeMoreBlazor/Program.cs" Line="27" Column="39" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="TellMeMoreBlazor" expanded="True">
+            <Node name="TellMeMoreBlazor" expanded="True">
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.TellMeMoreBlazor PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
