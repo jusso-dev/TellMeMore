@@ -1,17 +1,21 @@
 ﻿<Properties StartupConfiguration="{E21D4330-643C-433B-A890-C8D304ECFDD1}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="TellMeMoreBlazor/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="TellMeMoreBlazor/appsettings.Development.json">
     <Files>
       <File FileName="TellMeMoreBlazor/Startup.cs" Line="43" Column="36" />
       <File FileName="TellMeMoreBlazor.Shared/ConfigurationLogger/TellMeMoreLogger.cs" Line="24" Column="2" />
-      <File FileName="TellMeMoreBlazor/Program.cs" Line="27" Column="39" />
+      <File FileName="TellMeMoreBlazor/Program.cs" Line="26" Column="52" />
+      <File FileName="TellMeMoreBlazor/appsettings.Development.json" Line="9" Column="16" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="TellMeMoreBlazor" expanded="True">
             <Node name="TellMeMoreBlazor" expanded="True">
-              <Node name="Program.cs" selected="True" />
+              <Node name="appsettings.json" expanded="True">
+                <Node name="appsettings.Development.json" selected="True" />
+              </Node>
             </Node>
+            <Node name="TellMeMoreBlazor.Shared" expanded="True" />
           </Node>
         </State>
       </Pad>
