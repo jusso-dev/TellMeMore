@@ -36,7 +36,7 @@ namespace TellMeMoreBlazor.Services
 
 				var client = _client.CreateClient();
 
-				var res = await client.GetAsync($"{BaseUrl}/scan/{hostUrl}");
+				var res = await client.GetAsync($"{BaseUrl}{hostUrl}");
 
 				if (res.IsSuccessStatusCode)
 				{
