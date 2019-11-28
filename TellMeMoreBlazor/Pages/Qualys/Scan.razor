@@ -134,7 +134,6 @@
 		{
 			Loading = "Scan running .. Please Wait...";
 			Analysis = await IQualysService.QualysReport(HostUrl);
-
 			Loading = string.Empty;
 		}
 		catch (HttpRequestException ex)

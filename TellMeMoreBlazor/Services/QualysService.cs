@@ -28,7 +28,7 @@ namespace TellMeMoreBlazor.Services
 				if (string.IsNullOrEmpty(domainUrl)) throw new ArgumentNullException("Host URL was null or empty.");
 
 				var client = new SslLabsClient();
-				var result = client.GetAnalysis(domainUrl, 24, AnalyzeOptions.FromCache | AnalyzeOptions.ReturnAll);
+				var result = client.GetAnalysisBlocking(domainUrl, 24, AnalyzeOptions.FromCache | AnalyzeOptions.ReturnAll);
 
 				return Task.FromResult(result);
 			}
