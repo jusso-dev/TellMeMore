@@ -40,8 +40,15 @@ namespace TellMeMoreBlazor.Shared.ConfigurationLogger
 		{
 			try
 			{
-				string key = Environment.GetEnvironmentVariable(keyName)
+				string key = string.Empty;
+				
+				#if DEBUG
+					key = key = _config[keyName]?.ToString() ?? throw new ArgumentNullException($"Key {keyName} was not found. Please check the key is present in your application.Development.json file.");
+				#else
+					key = Environment.GetEnvironmentVariable(keyName)
 								?? throw new ArgumentNullException($"Key name of {keyName} was not found.");
+				#endif
+				
 				return key;
 			}
 

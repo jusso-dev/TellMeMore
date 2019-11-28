@@ -23,7 +23,12 @@ namespace TellMeMoreBlazor
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
                     webBuilder.UseKestrel(s => s.AddServerHeader = false);
-                    webBuilder.UseUrls("http://*:80");
+					#if DEBUG
+						webBuilder.UseUrls("http://*:80");
+					#else
+						webBuilder.UseUrls("http://*:443");
+					#endif
+                    
 					webBuilder.UseStartup<Startup>();
 				});
 	}
