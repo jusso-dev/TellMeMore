@@ -1,26 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure.KeyVault;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
 using TellMeMoreBlazor.Shared.Interfaces;
 
 namespace TellMeMoreBlazor.Shared.ConfigurationLogger
 {
-	public class TellMeMoreLogger : ITellMeMoreLogger
+    public class TellMeMoreLogger : ITellMeMoreLogger
 	{
 		private readonly IConfiguration _config;
-		private static string keyVaultUri = string.Empty;
 		public TellMeMoreLogger(IConfiguration configuration)
 		{
 			_config = configuration ?? throw new ArgumentNullException($"{nameof(IConfiguration)} was null.");
-#if DEBUG
-#else
-			keyVaultUri = Environment.GetEnvironmentVariable(KeyVaultUri);
-#endif
-
 		}
 
 		/// <summary>
@@ -50,23 +40,9 @@ namespace TellMeMoreBlazor.Shared.ConfigurationLogger
 		{
 			try
 			{
-				string key = string.Empty;
-
-#if DEBUG
-				key = _config[keyName]?.ToString() ?? throw new ArgumentNullException($"Key {keyName} was not found. Please check the key is present in your application.Development.json file.");
-#else
-				AzureServiceTokenProvider azureServiceTokenProvider = new AzureServiceTokenProvider();
-				var keyVaultClient = new KeyVaultClient(
-					new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
-				key = Environment.GetEnvironmentVariable(keyName);
-				
-				if(string.IsNullOrEmpty(key))
-				{
-					var sec = await keyVaultClient.GetSecretAsync(vaultBaseUrl: keyVaultUri, secretName: keyName);
-					key = sec?.Value;
-				}
-#endif
-				return key ?? throw new ArgumentNullException($"Key name of {keyName} was not found. Please check the key is present Azure Key Vault for Vault {keyVaultUri}.");
+				string key = Environment.GetEnvironmentVariable(keyName)
+								?? throw new ArgumentNullException($"Key name of {keyName} was not found.");
+				return key;
 			}
 
 			catch (Exception ex)
