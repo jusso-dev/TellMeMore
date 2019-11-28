@@ -19,9 +19,4 @@ WORKDIR /app
 COPY --from=publish /app .
 
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV UrlScanApiKey=""
-ENV BuiltWithApiKey=""
-ENV DnsDumpsterBaseUrl=""
-ENV RecapchaKey=""
-ENV KeyVaultUri=""
 ENTRYPOINT ["dotnet", "TellMeMoreBlazor.dll"]
