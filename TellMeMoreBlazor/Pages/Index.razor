@@ -45,51 +45,39 @@
 	<br />
 	<button type="submit" @onclick="@RunBulkScanAsync" class="btn btn-dark">Scan</button>
 
-	<div style="margin-top:1%;margin-bottom:1%">
+	<div style="margin-top:1%;margin-bottom:1%" class="col-md-4">
 		@if (DnsDumpsterLoading)
 		{
-			<p style="font-weight:bold;color:white;">dnsdumpster scan running....</p>
-
-			<div class="sk-chase">
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-			</div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">dnsdumpster scan running....</h5>
+                    <p class="card-text">Won't be a sec.</p>
+                </div>
+            </div>
 		}
 	</div>
-	<div style="margin-top:1%;margin-bottom:1%">
-		@if (QualysLoading)
-		{
-			<p style="font-weight:bold;color:white;">Qualys SSL Labs scan running....</p>
-
-			<div class="sk-chase">
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-			</div>
-		}
-	</div>
-	<div style="margin-top:1%;margin-bottom:1%">
-		@if (UrlScanIoLoading)
-		{
-			<p style="font-weight:bold;color:white;">urlscan.io scan running....</p>
-
-			<div class="sk-chase">
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-				<div class="sk-chase-dot"></div>
-			</div>
-		}
-	</div>
+    <div style="margin-top:1%;margin-bottom:1%" class="col-md-4">
+        @if (QualysLoading)
+        {
+            <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Qualys SSL Labs scan running.....</h5>
+                        <p class="card-text">Won't be a sec.</p>
+                    </div>
+                </div>
+        }
+    </div>
+    <div style="margin-top:1%;margin-bottom:1%" class="col-md-4">
+        @if (UrlScanIoLoading)
+        {
+            <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">urlscan.io scan running....</h5>
+                        <p class="card-text">Won't be a sec.</p>
+                    </div>
+                </div>
+        }
+    </div>
 </div>
 
 @if (combindedModel?.dnsDumpsterModel != null)
@@ -352,11 +340,6 @@
 			DnsDumpsterLoading = true;
 			QualysLoading = true;
 			UrlScanIoLoading = true;
-
-			combindedModel.dnsDumpsterModel = null;
-			combindedModel.analysis = null;
-			combindedModel.urlScanIo = null;
-
 			this.StateHasChanged();
 
 			combindedModel.dnsDumpsterModel = await IDnsDumpsterService.GetAsync(HostUrl);
