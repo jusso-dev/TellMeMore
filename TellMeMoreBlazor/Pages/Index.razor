@@ -45,7 +45,8 @@
 	<br />
 	<button type="submit" @onclick="@RunBulkScanAsync" class="btn btn-dark">Scan</button>
 
-	<div style="margin-top:1%;margin-bottom:1%" class="col-md-4">
+	<div class="row">
+        <div style="margin-top:1%;margin-bottom:1%;margin-right:2%;">
 		@if (DnsDumpsterLoading)
 		{
             <div class="card" style="width: 18rem;">
@@ -56,7 +57,7 @@
             </div>
 		}
 	</div>
-    <div style="margin-top:1%;margin-bottom:1%" class="col-md-4">
+    <div style="margin-top:1%;margin-bottom:1%;margin-right:2%;">
         @if (QualysLoading)
         {
             <div class="card" style="width: 18rem;">
@@ -67,7 +68,7 @@
                 </div>
         }
     </div>
-    <div style="margin-top:1%;margin-bottom:1%" class="col-md-4">
+    <div style="margin-top:1%;margin-bottom:1%">
         @if (UrlScanIoLoading)
         {
             <div class="card" style="width: 18rem;">
@@ -77,6 +78,7 @@
                     </div>
                 </div>
         }
+    </div>
     </div>
 </div>
 
@@ -325,45 +327,96 @@
 
 @code {
 
-	public bool DnsDumpsterLoading { get; set; }
-	public bool QualysLoading { get; set; }
-	public bool UrlScanIoLoading { get; set; }
+    public bool DnsDumpsterLoading { get; set; }
+    public bool QualysLoading { get; set; }
+    public bool UrlScanIoLoading { get; set; }
 
-	public string Error { get; set; }
-	public string HostUrl { get; set; }
-	public TellMeMoreBlazor.Models.CombinedModel combindedModel { get; set; } = new TellMeMoreBlazor.Models.CombinedModel();
+    public string Error { get; set; }
+    public string HostUrl { get; set; }
+    public TellMeMoreBlazor.Models.CombinedModel combindedModel { get; set; } = new TellMeMoreBlazor.Models.CombinedModel();
 
-	async Task RunBulkScanAsync()
-	{
-		try
-		{
-			DnsDumpsterLoading = true;
-			QualysLoading = true;
-			UrlScanIoLoading = true;
-			this.StateHasChanged();
+    async Task<bool> RunBulkScanAsync()
+    {
+        try
+        {
+            DnsDumpsterLoading = true;
+            QualysLoading = true;
+            UrlScanIoLoading = true;
 
-			combindedModel.dnsDumpsterModel = await IDnsDumpsterService.GetAsync(HostUrl);
-			DnsDumpsterLoading = false;
-			this.StateHasChanged();
+            await this.RunDnsDumpsterScanAsync();
+            await this.RunQualysScanAsync();
+            await this.RunUrlScanIOScanAsync();
 
-			combindedModel.analysis = await IQualysService.QualysReport(HostUrl);
-			QualysLoading = false;
-			this.StateHasChanged();
+            return true;
+        }
+        catch (Exception)
+        {
+            DnsDumpsterLoading = false;
+            QualysLoading = false;
+            UrlScanIoLoading = false;
 
-			var res = await IUrlScanIoService.PostAsync(HostUrl);
-			combindedModel.urlScanIo = await IUrlScanIoService.GetStatusAsync(res.uuid);
+            this.StateHasChanged();
+            return false;
+        }
+    }
 
-			UrlScanIoLoading = false;
-			this.StateHasChanged();
-		}
-		catch (Exception)
-		{
-			Error = "One or more errors occurred.";
-			DnsDumpsterLoading = false;
-			QualysLoading = false;
-			UrlScanIoLoading = false;
+    async Task<bool> RunDnsDumpsterScanAsync()
+    {
+        try
+        {
+            combindedModel.dnsDumpsterModel = await IDnsDumpsterService.GetAsync(HostUrl);
 
-			this.StateHasChanged();
-		}
-	}
+            DnsDumpsterLoading = false;
+            this.StateHasChanged();
+            return true;
+        }
+        catch (Exception)
+        {
+            Error = "dnsdumpster scan failed.";
+            DnsDumpsterLoading = false;
+
+            this.StateHasChanged();
+            return false;
+        }
+    }
+
+    async Task<bool> RunQualysScanAsync()
+    {
+        try
+        {
+            combindedModel.analysis = await IQualysService.QualysReport(HostUrl);
+
+            QualysLoading = false;
+            this.StateHasChanged();
+            return true;
+        }
+        catch (Exception)
+        {
+            Error = "Qualys scan failed.";
+            QualysLoading = false;
+
+            this.StateHasChanged();
+            return false;
+        }
+    }
+
+    async Task<bool> RunUrlScanIOScanAsync()
+    {
+        try
+        {
+            combindedModel.urlScanIo = await IUrlScanIoService.GetStatusAsync(HostUrl);
+
+            UrlScanIoLoading = false;
+            this.StateHasChanged();
+            return true;
+        }
+        catch (Exception)
+        {
+            Error = "UrlScanIo scan failed.";
+            UrlScanIoLoading = false;
+
+            this.StateHasChanged();
+            return false;
+        }
+    }
 }
