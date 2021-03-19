@@ -23,7 +23,6 @@ Web app to collectively preform reconnaissance on web hosted solutions
 - Go to https://www.google.com/recaptcha/admin and get new V2 "invisible" recaptcha client key
 - Ensure API keys are in application.Development.json file
 - cd to /TellMeMore/dnsdumpster-api and run 'pip install requirements.txt' and 'uvicorn main:app --reload' to run locally, will start on port 8000 by default
-- In the same directory after install has completed run 'python main.py' to start API
 - F5 run project
 
 <br />
